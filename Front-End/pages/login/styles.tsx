@@ -1,7 +1,11 @@
-import React from 'react'
-import { View, Text, Button, StatusBar, ImageBackground, StyleSheet, TextInput } from 'react-native';
-import styled from 'styled-components/native';
-
+/**
+ * [Renald 01/04] aqui estamos pegando as classes que criamos na pagina de login e 
+ * aplicando "css" para as classes, o conceito aqui é basicamente o mesmoa da criação de classes no 
+ * HTML e estilizando no arquivo CSS
+ * entenda mais sobre em 
+ * @external https://reactnative.dev/docs/stylesheet
+ */
+import { StyleSheet } from 'react-native';
 
 const  styles = StyleSheet.create({
     container: { 
@@ -80,4 +84,4 @@ const  styles = StyleSheet.create({
 
 })
 
-export default styles;
+export default styles; // exportando o arquivo
