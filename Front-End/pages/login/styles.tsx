@@ -7,14 +7,14 @@
  */
 import { StyleSheet } from 'react-native';
 
-const  styles = StyleSheet.create({
-    container: { 
+const styles = StyleSheet.create({
+    container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
     },
-    header: { 
+    header: {
         width: '100%',
         height: '100%',
         position: 'relative',
@@ -43,11 +43,9 @@ const  styles = StyleSheet.create({
         borderRadius: 25,
         backgroundColor: '#56449A',
         height: 50,
-        display:'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 20,
-        marginLeft: 50,
+        marginTop: 50, 
 
     },
 
@@ -58,9 +56,9 @@ const  styles = StyleSheet.create({
     },
 
     imagem: {
-        borderRadius: 250,
-        height: 250,
-        width: 250,
+        borderRadius: 300,
+        height: 230,
+        width: 230,
         marginBottom: 50,
     },
 
@@ -76,9 +74,13 @@ const  styles = StyleSheet.create({
         marginLeft: 165,
     },
 
-    eye : {
+    eye: {
         position: 'absolute',
         right: 0
+    },
+
+    imageFundoPageLogin : {
+        resizeMode: 'contain',
     }
 
 

@@ -7,6 +7,7 @@ import React from 'react';
 import { View, Text, Button, StatusBar, ImageBackground, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
 import { IconButton, Colors } from 'react-native-paper'; //[Renald 01/04] importando icones e cores do material desing
 import styles from './styles'; //[Renald 01/04]  importando pagina de estilo da pagina/tela
+
 /**
  * [Renald 01/04] 
  * entenda mais sobre organização de css/estilos/styles do reative native em
@@ -15,18 +16,18 @@ import styles from './styles'; //[Renald 01/04]  importando pagina de estilo da 
 
 // [Renald 01/04] gerando uma interface para não o typeScript nao reclamar da variavel navigation
 interface Navegacao {
-    navigation : any;
+    navigation: any;
 }
 //[Renald 01/04] abaixo apos o return começamos a nossa tela de login
 
-export default function Login({ navigation }:Navegacao ) {
+export default function Login({ navigation }: Navegacao) {
     /**
      * [Renald 01/04] useEffect responvel por esconder as informação da app como hora/dia/data/bateria
      * entenda mais sobre StatusBar.setHidden em
      * @external https://reactnative.dev/docs/statusbar#sethidden
      */
     React.useEffect(() => {
-        StatusBar.setHidden(true); 
+        StatusBar.setHidden(true);
     });
 
     /**
@@ -35,8 +36,8 @@ export default function Login({ navigation }:Navegacao ) {
      * @external https://pt-br.reactjs.org/docs/hooks-state.html#declaring-a-state-variable
      */
     const [text, onChangeText] = React.useState("Useless Text");
-    const [number, onChangeNumber] = React.useState(''); 
-    const [showPassword, onChangeShow ] = React.useState(false);
+    const [number, onChangeNumber] = React.useState('');
+    const [showPassword, onChangeShow] = React.useState(false);
 
     /**
      * [Renald 01/04] abaixo realmente começamos a implementanção da tela de login 
@@ -46,49 +47,49 @@ export default function Login({ navigation }:Navegacao ) {
      * @external https://reactnative.dev/docs/style
      */
     return ( 
-       <View style={[styles.header]}>
-           <Image source={ require("./img/bannerFundo.jpg")} blurRadius={10} />
+        <View style={[styles.header]}>
+            <Image source={require("./img/bannerFundo.jpg")} blurRadius={10} /> 
             <View style={styles.container}>
                 <View>
-                    <Image 
-                    blurRadius={0}
-                    resizeMode='contain'
-                    style={styles.imagem} 
-                    source={ require("./img/logo.jpg") }
+                    <Image
+                        blurRadius={0}
+                        resizeMode='contain'
+                        style={styles.imagem}
+                        source={require("./img/logo2.jpg")}
                     />
                 </View>
                 <View style={styles.icon}>
-                    <IconButton 
-                        onPress={() => {alert('This is a IconButton!')}} //[Renald 01/04] aqui colocamos um função para executar quando é pressionado o button/icon-button
-                        icon = "account-circle-outline" /**[Renald 01/04] escolher o icone por nome do mesmo devemos pesquisar o nome dos icones em  @external https://materialdesignicons.com/*/
-                        color = {Colors.white}
-                        size = {30}
+                    <IconButton
+                        onPress={() => { alert('This is a IconButton!') }} //[Renald 01/04] aqui colocamos um função para executar quando é pressionado o button/icon-button
+                        icon="account-circle-outline" /**[Renald 01/04] escolher o icone por nome do mesmo devemos pesquisar o nome dos icones em  @external https://materialdesignicons.com/*/
+                        color={Colors.white}
+                        size={30}
                     />
-                    <TextInput style={styles.input} 
-                        placeholder="Name"
+                    <TextInput style={styles.input}
+                        placeholder="Nome"
                         placeholderTextColor='white'
                         onChangeText={onChangeText}
                     />
                 </View>
                 <View style={styles.icon}>
-                    <IconButton 
-                        onPress={() => {alert('This is a IconButton!')}}
-                        icon = "lock"
-                        color = {Colors.white}
-                        size = {30}
+                    <IconButton
+                        onPress={() => { alert('This is a IconButton!') }}
+                        icon="lock"
+                        color={Colors.white}
+                        size={30}
                     />
-                    <TextInput  style={styles.input}
+                    <TextInput style={styles.input}
                         placeholderTextColor='white'
                         onChangeText={onChangeText}
-                        secureTextEntry={ showPassword === false ? true : false } //[Renald 01/04] usando if ternario para mostrar ou nao a senha baseado no useState
-                        placeholder="Password"
+                        secureTextEntry={showPassword === false ? true : false} //[Renald 01/04] usando if ternario para mostrar ou nao a senha baseado no useState
+                        placeholder="Senha"
                     />
-                    <IconButton 
+                    <IconButton
                         onPress={() => { showPassword == true ? onChangeShow(false) : onChangeShow(true) }} //[Renald 01/04] usando if ternario para mudar o valor do showPassword quando pressinado o button
-                        icon = {showPassword == false ? "eye-off" : 'eye'}//[Renald 01/04]usando if ternario para alterar icone de mostrar ou nao  senha 
-                        color = {Colors.white} 
-                        size = {20}
-                        style={ styles.eye }
+                        icon={showPassword == false ? "eye-off" : 'eye'}//[Renald 01/04]usando if ternario para alterar icone de mostrar ou nao  senha 
+                        color={Colors.white}
+                        size={20}
+                        style={styles.eye}
                     />
                 </View>
                 <View>
@@ -96,21 +97,21 @@ export default function Login({ navigation }:Navegacao ) {
                      * basicamente criamos o button colocamos uma função nele em onPress={() => {}} e dentro dele damos um nome 
                      * para o ficar dentro do button Text
                     */}
-                    <TouchableOpacity onPress={() => {navigation.navigate('Home')}} style={styles.appButtonContainer}>
+                    <TouchableOpacity onPress={() => { navigation.navigate('Home') }} style={styles.appButtonContainer}>
                         <Text style={styles.appButtonText}>Sing In</Text>
                     </TouchableOpacity>
                 </View>
-                 {/**Abaixo criamos o button que tera a função futuramente de recuperar a senha
+                {/**Abaixo criamos o button que tera a função futuramente de recuperar a senha
                   * do usuario
                 */}
                 <View style={styles.containerForgotPassword}>
-                    <TouchableOpacity onPress={() => {}}>
+                    <TouchableOpacity onPress={() => { }}>
                         <Text style={styles.textpassword}>Forgot your password?</Text>
                     </TouchableOpacity>
-                </View>         
-            </View> 
+                </View>
+            </View>
         </View>
     );
-} 
+}
 
 
