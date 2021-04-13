@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn, Column } from "typeorm";
 import { Users } from "./Users";
 
 @Entity("entity_checkins")
@@ -16,7 +16,10 @@ export class Checkins {
 
   @CreateDateColumn({ type: "timestamp" })
   final_hour: String;
-
+  
+  @Column({ type: "boolean" })
+  valid_location: Boolean
+  
   @CreateDateColumn({ type: "timestamp" })
   created_at: String;
 

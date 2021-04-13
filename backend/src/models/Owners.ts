@@ -15,6 +15,9 @@ export class Owners {
   @Column({ type: "varchar", length: 18 })
   CNPJ: String;
 
+  @Column({  type: "varchar", length: 25 })
+  phone: String;
+
   @CreateDateColumn({ type: "timestamp" })
   created_at: String;
 

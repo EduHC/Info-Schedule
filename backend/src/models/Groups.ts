@@ -16,7 +16,4 @@ export class Groups {
 
   @UpdateDateColumn({ type: "timestamp" })
   updated_at: String;
-
-  @Column({ type: "boolean" })
-  valid_location: Boolean
 }

@@ -1,10 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm";
+import { Owners } from "./Owners";
 
 @Entity("entity_users")
 export class Users {
 
   @PrimaryGeneratedColumn({type:"int"})
   id_user: number;
+
+  @ManyToOne(() => Owners, owner => owner.id_owner)
+  id_owner: Owners;
 
   @Column({ type: "varchar", length: 200 })
   name: String;
@@ -14,12 +18,6 @@ export class Users {
 
   @Column({ type: "varchar", length: 100 })
   password: String;
-
-  @Column({ type: "varchar", length: 150 })
-  email: String;
-
-  @Column({ type: "varchar", length: 18 })
-  phone: String;
 
   @CreateDateColumn({ type: "timestamp" })
   created_at: String;
