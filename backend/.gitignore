@@ -1,3 +1,4 @@
 /node_modules
 /Resources.txt
 /.env
+./src/models/Checkin.ts
