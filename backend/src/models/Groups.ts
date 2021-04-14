@@ -1,15 +1,21 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn } from "typeorm";
-import { Users } from "./Users";
+import { Owners } from "./Owners";
 
 @Entity("entity_groups")
 export class Groups {
 
-  @PrimaryGeneratedColumn({type:"int"})
+  @PrimaryGeneratedColumn({ type: "int" })
   id_group: number;
 
-  @OneToOne(() => Users)
-  @JoinColumn()
-  id_user: Users;
+  @OneToOne(() => Owners, owner => owner.id_owner)
+  @JoinColumn({ name: "id_owner" })
+  id_owner: Owners;
+
+  @Column({ type: "timestamp" })
+  start_hour: String;
+
+  @Column({ type: "timestamp" })
+  end_hour: String;
 
   @CreateDateColumn({ type: "timestamp" })
   created_at: String;
