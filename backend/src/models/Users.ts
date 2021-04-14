@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import { Owners } from "./Owners";
 
 @Entity("entity_users")
@@ -8,6 +8,7 @@ export class Users {
   id_user: number;
 
   @ManyToOne(() => Owners, owner => owner.id_owner)
+  @JoinColumn({ name: "id_owner" })
   id_owner: Owners;
 
   @Column({ type: "varchar", length: 200 })
