@@ -20,12 +20,17 @@ export class GroupsMigration1618376905946 implements MigrationInterface {
 							unsigned: true
 						},
 						{
+							name: 'name',
+							type: 'varchar',
+							length: '100'
+						},
+						{
 							name: 'start_hour',
-							type: 'timestamp'
+							type: 'time'
 						},
 						{
 							name: 'end_hour',
-							type: 'timestamp'
+							type: 'time'
 						},
 						{
 							name: 'created_at',

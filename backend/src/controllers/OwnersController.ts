@@ -14,16 +14,17 @@ export default {
     };
 
     const ownersRepository = getRepository(Owners);
+    let owner = {};
 
     try {
-      const owner = await ownersRepository.create(ownerData);
+      owner = await ownersRepository.create(ownerData);
       await ownersRepository.save(owner);
 
     } catch (err) {
       return res.json(err);
     }
     
-    return res.status(201).json( "Criado" );
+    return res.status(201).json(owner);
   },
 
   async findAll(req: Request, res: Response) {
