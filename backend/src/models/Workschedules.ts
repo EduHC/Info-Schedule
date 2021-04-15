@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import { Owners } from "./Owners";
 
 @Entity("entity_workschedule")
@@ -7,8 +7,8 @@ export class Workschedule {
   @PrimaryGeneratedColumn({type:"int"})
   id_workschedule: number;
 
-  @OneToOne(() => Owners)
-  @JoinColumn()
+  @ManyToOne(() => Owners)
+  @JoinColumn({ name: "id_owner" })
   id_owner: Owners;
 
   @Column({ type: "date" })
