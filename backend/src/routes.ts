@@ -4,8 +4,11 @@ import UsersController from "./controllers/UsersController";
 import OwnersController from "./controllers/OwnersController";
 import GroupsController from "./controllers/GroupsController";
 import WorkschedulesController from "./controllers/WorkschedulesController";
+import SessionController from "./controllers/SessionController";
 
 const routes = Router();
+
+routes.post("/authenticate", SessionController.authenticate);
 
 routes.get("/users", UsersController.findAll);
 routes.get("/users/:id", UsersController.findOne);
