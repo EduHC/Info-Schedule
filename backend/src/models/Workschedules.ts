@@ -1,13 +1,13 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import { Owners } from "./Owners";
 
-@Entity("entity_workschedule")
-export class Workschedule {
+@Entity("entity_workschedules")
+export class Workschedules {
 
   @PrimaryGeneratedColumn({type:"int"})
   id_workschedule: number;
 
-  @ManyToOne(() => Owners)
+  @ManyToOne(() => Owners, owner => owner.id_owner)
   @JoinColumn({ name: "id_owner" })
   id_owner: Owners;
 
