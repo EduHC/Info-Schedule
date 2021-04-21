@@ -88,6 +88,6 @@ export default {
       return res.json(err);
     }
 
-    return res.status(200).json("Usuário deletado");
+    return res.status(200).json({ message: "Usuário deletado"});
   }
 }
