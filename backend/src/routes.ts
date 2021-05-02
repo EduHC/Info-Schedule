@@ -6,6 +6,7 @@ import GroupsController from "./controllers/GroupsController";
 import WorkschedulesController from "./controllers/WorkschedulesController";
 import SessionController from "./controllers/SessionController";
 import ProfilesController from "./controllers/ProfilesController";
+import UsersProfilesController from "./controllers/UsersProfilesController";
 
 const routes = Router();
 
@@ -21,18 +22,22 @@ routes.get("/workschedules", WorkschedulesController.findAll);
 routes.get("/workschedules/:id", WorkschedulesController.findOne);
 routes.get("/profiles", ProfilesController.findAll);
 routes.get("/profiles/:id", ProfilesController.findOne);
+routes.get("/usersprofiles/:id", UsersProfilesController.findAllProfilesOfOneUser);
+
 
 routes.post("/users", UsersController.create);
 routes.post("/owners", OwnersController.create);
 routes.post("/groups", GroupsController.create);
 routes.post("/workschedules", WorkschedulesController.create);
 routes.post("/profiles", ProfilesController.create);
+routes.post("/usersprofiles", UsersProfilesController.attachProfilesToOneUser);
 
 routes.put("/users/:id", UsersController.update);
 routes.put("/owners/:id", OwnersController.update);
 routes.put("/groups/:id", GroupsController.update);
 routes.put("/workschedules/:id", WorkschedulesController.update);
 routes.put("/profiles/:id", ProfilesController.update);
+routes.put("/usersprofiles", UsersProfilesController.updateUserProfiles);
 
 routes.delete("/users/:id", UsersController.delete);
 routes.delete("/owners/:id", OwnersController.delete);

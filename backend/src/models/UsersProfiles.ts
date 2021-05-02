@@ -8,11 +8,11 @@ export class UsersProfiles {
   @PrimaryGeneratedColumn({type:"int", unsigned: true})
   id_association: number;
 
-  @OneToOne(() => Users)
+  @OneToOne(() => Users, { eager: true })
   @JoinColumn({ name:"id_user" })
-  id_owner: Users;
+  id_user: Users;
 
-  @OneToOne(() => Profiles)
+  @OneToOne(() => Profiles, { eager: true })
   @JoinColumn({ name:"id_profile" })  
   id_profile: Profiles;
 }
