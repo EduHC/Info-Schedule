@@ -40,8 +40,6 @@ export default {
 
     try {
       userProfiles = await usersProfilesRepository.find({ where: {id_user: id} })
-
-      console.log(userProfiles);
     } catch (err) {
       return res.json(err);
     }
@@ -68,7 +66,6 @@ export default {
       switch(id_action){
         case 1:
           // Action 1 será para atualização, incremento de perfis
-          console.log("Entrou no action 1")
           profiles.forEach(profile => {
             const newUserProfile = usersProfilesRepository.create({
               id_user: id_user,

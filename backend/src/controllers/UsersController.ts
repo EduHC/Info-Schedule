@@ -1,25 +1,36 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { Users } from "../models/Users";
+import * as Yup from "yup";
 
 export default {
   async create(req: Request, res: Response) {
-    const { name, login, password, email, phone, id_owner } = req.body;
-    
+    const { name, login, password, id_owner } = req.body;
+
+    // Definindo a estrutura do objeto e seus atributos a serem validados
+    const schema = Yup.object().shape({
+      id_owner: Yup.number().required().integer().positive(),
+      name: Yup.string().required(),
+      login: Yup.string().required(),
+      password: Yup.string().required()
+    });
+   
     const userData = {
       id_owner,
       name,
       login,
-      password,
-      email,
-      phone
+      password
     };
+
+    if (!schema.validate(userData)) {
+      return res.status(401).json({ message: "Dado informado incorretamente",   });
+    }
 
     const usersRepository = getRepository(Users);
     let user = {};
 
     try {
-      user = await usersRepository.create(userData);
+      user = usersRepository.create(userData);
       await usersRepository.save(user);
     } catch (err) {
       return res.json(err);
@@ -60,10 +71,30 @@ export default {
     const { name, login, password } = req.body;
     const { id } = req.params;
 
+    const schema = Yup.object().shape({
+      name: Yup.string(),
+      login: Yup.string(),
+      password: Yup.string()
+    });
+
+    const userData = {
+      name: name,
+      login: login,
+      password: password
+    }
+
+    if (!schema.validate(userData)) {
+      return res.status(400).json({ message: "Dados informado incorretamente" });
+    }
+
     const usersRepository = getRepository(Users);
     
     try {
       const userData = await usersRepository.findOne(id);
+
+      if (!userData) {
+        return res.status(400).json({ message: "Usuário não econtrado!" });
+      }
 
       await usersRepository.update(id, {
         name: name ? name : userData?.name,
@@ -81,6 +112,12 @@ export default {
     const { id } = req.params;
 
     const usersRepository = getRepository(Users);
+
+    const userData = await usersRepository.findOne(id);
+
+    if (!userData) {
+      return res.status(400).json({ message: "Usuário não econtrado!" });
+    }
 
     try {
       await usersRepository.delete(id);
