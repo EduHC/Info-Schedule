@@ -5,14 +5,14 @@ import { Users } from "./Users";
 @Entity("association_users_profiles")
 export class UsersProfiles {
 
-  @PrimaryGeneratedColumn({type:"int"})
+  @PrimaryGeneratedColumn({type:"int", unsigned: true})
   id_association: number;
 
-  @OneToOne(() => Users)
-  @JoinColumn()
-  id_owner: Users;
+  @OneToOne(() => Users, { eager: true })
+  @JoinColumn({ name:"id_user" })
+  id_user: Users;
 
-  @OneToOne(() => Profiles)
-  @JoinColumn()  
+  @OneToOne(() => Profiles, { eager: true })
+  @JoinColumn({ name:"id_profile" })  
   id_profile: Profiles;
 }
