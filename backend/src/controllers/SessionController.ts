@@ -14,7 +14,7 @@ export default {
       const user = await usersRepository.findOne({ where: { login: login, password: password }});
 
       if ( !user ) {
-        return res.status(401).json({ message: "Usuário ou senha errados!" });
+        return res.status(200).json({ token: "Usuário ou senha errados!" });
       }
 
       token = sign({}, "requiem", {
@@ -26,6 +26,6 @@ export default {
       return res.json(err);
     }
 
-    return res.status(200).json(token);
+    return res.status(200).json({token: token});
   }
 }
