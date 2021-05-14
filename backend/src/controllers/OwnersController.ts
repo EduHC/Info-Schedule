@@ -17,7 +17,7 @@ export default {
     let owner = {};
 
     try {
-      owner = await ownersRepository.create(ownerData);
+      owner = ownersRepository.create(ownerData);
       await ownersRepository.save(owner);
 
     } catch (err) {
