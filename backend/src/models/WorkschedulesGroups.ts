@@ -4,7 +4,7 @@ import { Groups } from "./Groups";
 
 
 @Entity("association_groups_workschedules")
-export class GroupsWorkschedules {
+export class WorkschedulesGroups {
 
   @PrimaryGeneratedColumn({type:"integer"})
   id_association: number;
