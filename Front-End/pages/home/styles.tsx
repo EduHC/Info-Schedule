@@ -10,7 +10,7 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   homeContainer: {
-    backgroundColor: "#ccc",
+    backgroundColor: "#f5f5f5",
     padding: 10,
     flex: 1,
   },

@@ -81,6 +81,16 @@ const styles = StyleSheet.create({
 
     imageFundoPageLogin : {
         resizeMode: 'contain',
+    },
+
+    textError: {
+        color: 'red',
+        textAlign: 'left',
+    },
+    divText : {
+        justifyContent: 'flex-start',
+        marginRight: 55,
+        marginTop: 10,
     }
 
 

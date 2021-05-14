@@ -1,7 +1,6 @@
-import React from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import React, { useEffect, useState } from 'react';
 import { IconButton, Colors } from 'react-native-paper'; //[Renald 01/04] importando icones e cores do material desing
-
 import styles from './styles'
 
 /**
@@ -11,7 +10,9 @@ import styles from './styles'
     * entenda mais de style em react native em
     * @external https://reactnative.dev/docs/style
 */
-export default function Home() {
+
+
+export default function Home(props) {
     return (
         <View style={styles.homeContainer}>
             <View style={styles.titlePageHomeContainer}>
@@ -65,7 +66,7 @@ export default function Home() {
                     </TouchableOpacity>
 
                     <Text style={styles.titleSectionPageHome}>Gerenciamento de Usuários</Text>
-                    <TouchableOpacity onPress={() => { }} style={styles.buttonsPageHomeContainer}>
+                    <TouchableOpacity onPress={() => {  }} style={styles.buttonsPageHomeContainer}>
                         <IconButton style={styles.buttonIconPageHome}
                             icon="account-search"
                             color='white'
@@ -74,7 +75,7 @@ export default function Home() {
                         />
                         <Text style={styles.textButtonsPageHome}>Visualizar Usuario</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { }} style={styles.buttonsPageHomeContainer}>
+                    <TouchableOpacity onPress={() => {  props.navigation.push('Adicionar Usuario') }} style={styles.buttonsPageHomeContainer}>
                         <IconButton style={styles.buttonIconPageHome}
                             icon="account-plus"
                             color='white'
@@ -83,7 +84,7 @@ export default function Home() {
                         />
                         <Text style={styles.textButtonsPageHome}>Adicionar Usuário</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { }} style={styles.buttonsPageHomeContainer}>
+                    <TouchableOpacity onPress={() => {  }} style={styles.buttonsPageHomeContainer}>
                         <IconButton style={styles.buttonIconPageHome}
                             icon="account-multiple-remove"
                             color='white'

@@ -13,7 +13,7 @@ export default {
   Mais informações em: https://www.npmjs.com/package/dotenv
    */
   "type": process.env.TYPE,
-  "post": process.env.HOST,
+  "host": process.env.HOST,
   "port": process.env.PORT,
   "username": process.env.USER,
   "password": process.env.PASSWORD,

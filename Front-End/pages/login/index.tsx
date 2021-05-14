@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 /**
  * [Renald 01/04]  importando components necessario para a pagina
  * entenda mais sobre components em
  * @external https://reactnative.dev/docs/components-and-apis
  */
-import { View, Text, Button, StatusBar, ImageBackground, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, Text, Button, StatusBar, AsyncStorage, TextInput, TouchableOpacity, Image } from 'react-native';
 import { IconButton, Colors } from 'react-native-paper'; //[Renald 01/04] importando icones e cores do material desing
 import styles from './styles'; //[Renald 01/04]  importando pagina de estilo da pagina/tela
-
+import api from '../../services/api';
+import react from 'react';
 /**
  * [Renald 01/04] 
  * entenda mais sobre organização de css/estilos/styles do reative native em
@@ -18,9 +19,9 @@ import styles from './styles'; //[Renald 01/04]  importando pagina de estilo da 
 interface Navegacao {
     navigation: any;
 }
-//[Renald 01/04] abaixo apos o return começamos a nossa tela de login
 
-export default function Login({ navigation }: Navegacao) {
+//[Renald 01/04] abaixo apos o return começamos a nossa tela de login
+export default function Login(props) {
     /**
      * [Renald 01/04] useEffect responvel por esconder as informação da app como hora/dia/data/bateria
      * entenda mais sobre StatusBar.setHidden em
@@ -35,10 +36,34 @@ export default function Login({ navigation }: Navegacao) {
      * entenda mais sobre useStates em 
      * @external https://pt-br.reactjs.org/docs/hooks-state.html#declaring-a-state-variable
      */
-    const [text, onChangeText] = React.useState("Useless Text");
+    const [text, onChangeText] = React.useState('');
     const [number, onChangeNumber] = React.useState('');
+    const [token, setToken] = React.useState('');
     const [showPassword, onChangeShow] = React.useState(false);
+    const [showSenhaIncorreta, onChangeSenha] = React.useState(false);
 
+    function singIn() {
+        api.post('/authenticate',{
+            login: text,
+            password: number,
+        }).then((response) => {
+            setToken(response.data.token);
+            console.log(token);
+            // console.log(token);
+            if( token === 'Usuário ou senha errados!' ) {
+                onChangeSenha(true);
+                setTimeout(() => {
+                    onChangeSenha(false);
+                }, 3000);
+            }else if( token.length >= 100 ) {
+                props.navigation.navigate('Home');
+                setTimeout(() => {
+                    setToken('Usuário ou senha errados!');
+                }, 500);
+            }
+        })
+    };
+   
     /**
      * [Renald 01/04] abaixo realmente começamos a implementanção da tela de login 
      * utilizamos muito o conceito de html e css aqui  as Views basicamente funcionam como <div>
@@ -69,6 +94,7 @@ export default function Login({ navigation }: Navegacao) {
                         placeholder="Nome"
                         placeholderTextColor='white'
                         onChangeText={onChangeText}
+                        clearButtonMode={'always'}
                     />
                 </View>
                 <View style={styles.icon}>
@@ -80,9 +106,11 @@ export default function Login({ navigation }: Navegacao) {
                     />
                     <TextInput style={styles.input}
                         placeholderTextColor='white'
-                        onChangeText={onChangeText}
+                        onChangeText={onChangeNumber}
                         secureTextEntry={showPassword === false ? true : false} //[Renald 01/04] usando if ternario para mostrar ou nao a senha baseado no useState
                         placeholder="Senha"
+                        clearButtonMode={'always'}
+
                     />
                     <IconButton
                         onPress={() => { showPassword == true ? onChangeShow(false) : onChangeShow(true) }} //[Renald 01/04] usando if ternario para mudar o valor do showPassword quando pressinado o button
@@ -92,12 +120,22 @@ export default function Login({ navigation }: Navegacao) {
                         style={styles.eye}
                     />
                 </View>
+
+                <View style={showSenhaIncorreta == false ? { display : 'none'} :  { display : 'flex'} } >
+                    <Text style={styles.textError}>Senha ou Usuario invalido</Text>
+                </View>
+
                 <View>
                     {/**Abaixo criamos o button que tera a função futuramente de fazer a verificação de login e mandar para home 
                      * basicamente criamos o button colocamos uma função nele em onPress={() => {}} e dentro dele damos um nome 
                      * para o ficar dentro do button Text
                     */}
-                    <TouchableOpacity onPress={() => { navigation.navigate('Home') }} style={styles.appButtonContainer}>
+                    <TouchableOpacity onPress={() => {
+                        // console.log('oi');
+                        // console.log(text);
+                        // console.log(number);
+                        singIn();
+                     }} style={styles.appButtonContainer}>
                         <Text style={styles.appButtonText}>Sing In</Text>
                     </TouchableOpacity>
                 </View>
@@ -106,7 +144,7 @@ export default function Login({ navigation }: Navegacao) {
                 */}
                 <View style={styles.containerForgotPassword}>
                     <TouchableOpacity onPress={() => { }}>
-                        <Text style={styles.textpassword}>Forgot your password?</Text>
+                        <Text style={styles.textpassword}>Esqueceu sua senha?</Text>
                     </TouchableOpacity>
                 </View>
             </View>
