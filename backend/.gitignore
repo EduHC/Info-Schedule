@@ -1,3 +1,5 @@
 /node_modules
 /Resources.txt
 /.env
+/src/errors
+/src/utils
