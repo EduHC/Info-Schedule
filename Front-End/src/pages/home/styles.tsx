@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 90,
     marginTop: 10,
+    marginRight: 10
   },
   textButtonsPageHome: {
     color: "white",
