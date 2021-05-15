@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
  * entenda mais sobre components em
  * @external https://reactnative.dev/docs/components-and-apis
  */
-import { View, Text, Button, StatusBar, AsyncStorage, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, Text, Button, StatusBar, TextInput, TouchableOpacity, Image } from 'react-native';
 import { IconButton, Colors } from 'react-native-paper'; //[Renald 01/04] importando icones e cores do material desing
 import styles from './styles'; //[Renald 01/04]  importando pagina de estilo da pagina/tela
 import api from '../../services/api';
@@ -16,17 +16,18 @@ import react from 'react';
  */
 
 // [Renald 01/04] gerando uma interface para não o typeScript nao reclamar da variavel navigation
-interface Navegacao {
-    navigation: any;
-}
-
+interface Help {
+    props: any
+    navigation: any
+  }
 //[Renald 01/04] abaixo apos o return começamos a nossa tela de login
-export default function Login(props) {
+export default function Login({navigation}) {
     /**
      * [Renald 01/04] useEffect responvel por esconder as informação da app como hora/dia/data/bateria
      * entenda mais sobre StatusBar.setHidden em
      * @external https://reactnative.dev/docs/statusbar#sethidden
      */
+
     React.useEffect(() => {
         StatusBar.setHidden(true);
     });
@@ -36,32 +37,34 @@ export default function Login(props) {
      * entenda mais sobre useStates em 
      * @external https://pt-br.reactjs.org/docs/hooks-state.html#declaring-a-state-variable
      */
-    const [text, onChangeText] = React.useState('');
-    const [number, onChangeNumber] = React.useState('');
+
+    const [nome, onChangeNome] = React.useState('');
+    const [senha, onChangeSenhaLogin] = React.useState('');
     const [token, setToken] = React.useState('');
     const [showPassword, onChangeShow] = React.useState(false);
     const [showSenhaIncorreta, onChangeSenha] = React.useState(false);
 
-    function singIn() {
-        api.post('/authenticate',{
-            login: text,
-            password: number,
-        }).then((response) => {
-            setToken(response.data.token);
-            console.log(token);
-            // console.log(token);
-            if( token === 'Usuário ou senha errados!' ) {
-                onChangeSenha(true);
-                setTimeout(() => {
-                    onChangeSenha(false);
-                }, 3000);
-            }else if( token.length >= 100 ) {
-                props.navigation.navigate('Home');
-                setTimeout(() => {
-                    setToken('Usuário ou senha errados!');
-                }, 500);
-            }
-        })
+    async function singIn() {
+        const resp = await api.post('/authenticate',{
+            login: nome,
+            password: senha,
+        });
+        const resposta = resp.data.token;
+        if( resposta === 'Usuário ou senha errados!' ) {
+            onChangeSenha(true);
+            setTimeout(() => {
+                onChangeSenha(false);
+            }, 3000);
+
+        }else if( resposta.length >= 100 ) {
+            navigation.navigate('Home',{
+                token: resposta,
+                otherParam: 'anything you want here',
+              });
+            onChangeNome('');
+            onChangeSenhaLogin('');
+        }
+
     };
    
     /**
@@ -71,6 +74,7 @@ export default function Login(props) {
      * entenda mais de style em react native em
      * @external https://reactnative.dev/docs/style
      */
+
     return ( 
         <View style={[styles.header]}>
             <Image source={require("./img/bannerFundo.jpg")} blurRadius={10} /> 
@@ -93,7 +97,8 @@ export default function Login(props) {
                     <TextInput style={styles.input}
                         placeholder="Nome"
                         placeholderTextColor='white'
-                        onChangeText={onChangeText}
+                        onChangeText={text => onChangeNome(text)}
+                        value= {nome}
                         clearButtonMode={'always'}
                     />
                 </View>
@@ -106,7 +111,8 @@ export default function Login(props) {
                     />
                     <TextInput style={styles.input}
                         placeholderTextColor='white'
-                        onChangeText={onChangeNumber}
+                        onChangeText={text => onChangeSenhaLogin(text)}
+                        value= {senha}
                         secureTextEntry={showPassword === false ? true : false} //[Renald 01/04] usando if ternario para mostrar ou nao a senha baseado no useState
                         placeholder="Senha"
                         clearButtonMode={'always'}

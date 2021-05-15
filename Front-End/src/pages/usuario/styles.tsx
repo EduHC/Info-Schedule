@@ -2,25 +2,30 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
     input: {
         fontSize: 18,
-        width: 270,
+        width: '100%',
         borderBottomColor: '#56449A',
         color: '#56449A',
         marginTop: 15,
         padding: 10,
-
     },
 
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         backgroundColor: '#56449A',
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        padding: 10,
     },
 
     form: {
+        display: 'flex',
         backgroundColor: '#f5f5f5',
-        padding: 20,
-        borderRadius: 20
+        flexGrow: 1,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 10,
+        position: 'relative',
     },
     h1: {
         color:'#56449A',
@@ -50,11 +55,10 @@ const styles = StyleSheet.create({
         marginTop: 22
       },
       modalView: {
-        margin: 20,
+        marginTop: 250,
         backgroundColor: "white",
         borderRadius: 20,
         padding: 35,
-        alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
           width: 0,
@@ -78,11 +82,37 @@ const styles = StyleSheet.create({
       textStyle: {
         color: "white",
         fontWeight: "bold",
-        textAlign: "center"
+        textAlign: "center",
       },
       modalText: {
         marginBottom: 15,
-        textAlign: "center"
+        textAlign: 'left',
+      },
+      info: {
+        color: 'white',
+        fontSize: 20,
+        marginBottom: 10
+      },
+      containerInfo: {
+        padding: 10,
+        marginTop: 20,
+      },
+      image: {
+        width: 50,
+        height: 50,
+      },
+      containerImage: {
+        backgroundColor: '#f5f5f5',
+        width: 80,
+        height: 80,
+        borderRadius: 60,
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        top: -30,
+        right: -15,
+        zIndex: 10
+
       }
 });
 
