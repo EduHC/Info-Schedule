@@ -1,5 +1,7 @@
+import { UsersProfiles } from "../models/UsersProfiles";
+
 export default {
-  render(arrayOfProfiles: Array<any>) {
+  render(arrayOfProfiles: Array<UsersProfiles>) {
     const profiles: any[] = []; 
     const profiles_id: Number[] = [];
 

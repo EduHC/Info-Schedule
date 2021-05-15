@@ -59,7 +59,7 @@ export default {
     let user = {};
 
     try {
-      user = await usersRepository.findOneOrFail(id);
+      user = await usersRepository.findOneOrFail({ loadRelationIds: true, where: { id_user: id } });
     } catch (err) {
       return res.json(err);
     }

@@ -3,7 +3,7 @@ import { getRepository } from "typeorm";
 import { Users } from "../models/Users";
 import { UsersProfiles } from "../models/UsersProfiles";
 import { sign } from "jsonwebtoken";
-import UserProfilesView from "../views/UsserProfilesView";
+import UserProfilesView from "../views/UserProfilesView";
 
 export default {
   async authenticate(req: Request, res: Response) {
@@ -15,23 +15,16 @@ export default {
     let token;
 
     try { 
-      const user = await usersRepository.findOne({ where: { login: login, password: password }});
-      const profiles: any[] = await usersProfilesRepository.find({ where: { id_user: user?.id_user } });
+      const user = await usersRepository.findOne({ where: { login: login, password: password }, loadRelationIds: true });
+      const profiles: UsersProfiles[] = await usersProfilesRepository.find({ where: { id_user: user?.id_user } });
 
       if ( !user ) {
         return res.status(200).json({ token: "Usuário ou senha errados!" });
       }
 
-      console.log({
-        payload: {
-          id_owner: user.id_owner,
-          id_user: user.id_user,
-          profile: UserProfilesView.render(profiles)
-        }
-      });
-
       token = sign({
         payload: {
+          name: user.name,
           id_owner: user.id_owner,
           id_user: user.id_user,
           profile: UserProfilesView.render(profiles)
