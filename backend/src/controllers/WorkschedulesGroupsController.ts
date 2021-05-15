@@ -2,46 +2,47 @@ import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { WorkschedulesGroups } from "../models/WorkschedulesGroups";
 import { Groups } from "../models/Groups";
+import { Workschedules } from  "../models/Workschedules";
 import * as Yup from "yup";
 
 export default {
-  async attachUsersToOneGroup(req: Request, res: Response) {
+  async attachGroupsToOneWorkschedule(req: Request, res: Response) {
     const { id_workschedule, groups } = req.body;
 
     const schema = Yup.object().shape({
-      id_group: Yup.number().integer().required(),
-      users: Yup.array().of(
+      id_workschedule: Yup.number().integer().required(),
+      groups: Yup.array().of(
             Yup.number().positive()
         ).min(1).required()
     });
 
     const data = {
-      id_group: id_group,
-      users: users
+      id_workshedule: id_workschedule,
+      groups: groups
     };
     
     if (!schema.validate(data)) {
       return res.json({ message: "Informação enviada de forma incorreta" });
     }
 
-    const groupsRepository = getRepository(Groups);
+    const workschedulesRepository = getRepository(Workschedules);
 
-    const group = await groupsRepository.findOne(id_group);
+    const workschedule = await workschedulesRepository.findOne(id_workschedule);
 
-    if (!group) {
-      return res.status(400).json({ message: "Grupo informado não existe" });
+    if (!workschedule) {
+      return res.status(400).json({ message: "Escala informada não existe" });
     }
 
-    const groupsUsersRepository = getRepository(GroupsUsers);
+    const workschedulesGroupsRepository = getRepository(WorkschedulesGroups);
 
     try {
-      users.forEach(async (user: any) => {
-        const newGroupUser = groupsUsersRepository.create({
-          id_group: id_group,
-          id_user: user
+      groups.forEach(async (group: any) => {
+        const newWorkscheduleGroup = workschedulesGroupsRepository.create({
+          id_group: group,
+          id_workschedule: id_workschedule 
         });
 
-        await groupsUsersRepository.save(newGroupUser);
+        await workschedulesGroupsRepository.save(newWorkscheduleGroup);
       });
 
     } catch (err) {
