@@ -50,71 +50,72 @@ export default {
     }
   },
 
-  async findAllUsersOfOneGroup(req: Request, res: Response) {
+  async findAllGroupsOfOneWorkschedule(req: Request, res: Response) {
     const { id } = req.params;
 
-    const groupsRepository = getRepository(Groups);
+    const workschedulesRepository = getRepository(Workschedules);
 
-    const group = await groupsRepository.findOne(id);
+    const workschedule = await workschedulesRepository.findOne(id);
 
-    if (!group) {
-      return res.status(400).json({ message: "Grupo informado não existe" });
+    if (!workschedule) {
+      return res.status(400).json({ message: "Escala informada não existe" });
     }
 
-    const groupsUsersRepository = getRepository(GroupsUsers);
-    let groupUsers = {};
+    const workschedulesGroupsRepository = getRepository(WorkschedulesGroups);
+    let workscheduleGroup = {};
 
     try {
-      groupUsers = await groupsUsersRepository.find({ where: {id_group: id} })
+      workscheduleGroup = await workschedulesGroupsRepository.find({ where: {id_workschedule: id} })
     } catch (err) {
       return res.json(err);
     }
     
-    return res.json(groupUsers);
+    return res.json(workscheduleGroup);
   },
 
-  async updateUsersOfOneGroup(req: Request, res: Response) {
-    const { users, id_action, id_group } = req.body;
+  async updateGroupsOfOneWorkschedule(req: Request, res: Response) {
+    const { groups, id_action, id_workschedule } = req.body;
 
-    if (!Array.isArray(users)) {
+    if (!Array.isArray(groups)) {
       return res.status(401).json({ 
-        message: "Objeto profiles informado em formato incorreto! É preciso ser um array" 
+        message: "Objeto grupo informado em formato incorreto! É preciso ser um array" 
       });
     }
 
-    if (users.length === 0) {
-      return res.status(401).json({ message: "É necessário informar ao menos 1 perfil!" });
+    if (groups.length === 0) {
+      return res.status(401).json({ message: "É necessário informar ao menos 1 grupo!" });
     }
 
-    const groupsUsersRepository = getRepository(GroupsUsers);
+    const workschedulesgGroupsRepository = getRepository(WorkschedulesGroups);
 
     try {
       switch(id_action){
         case 1:
-          // Action 1 será para atualização, incremento de perfis
-          users.forEach(async user => {
-            const newUserProfile = groupsUsersRepository.create({
-              id_user: user,
-              id_group: id_group
+          // Action 1 será para atualização, incremento de grupos
+          groups.forEach(async group => {
+            const newWorkscheduleGroup = workschedulesgGroupsRepository.create({
+              id_workschedule: id_workschedule,
+              id_group: group
+              
             }); 
 
-            await groupsUsersRepository.save(newUserProfile);
+            await workschedulesgGroupsRepository.save(newWorkscheduleGroup);
           });
         break;
             
         case 2: 
           // Action 2 será para atualização, remoção de perfis
-          users.forEach(async user => {
-            await groupsUsersRepository.delete({ id_user: user, id_group: id_group });
+          groups.forEach(async group => {
+            await workschedulesgGroupsRepository.delete({ id_group: group, id_workschedule: id_workschedule });
           });
         break;
         default:
-          return res.status(401).json({ message: "Ação desconhecida, favor informar uma válida!" });
+          return res.status(401).json({ message: "Ação desconhecida, favor informar uma rota válida!" });
       }     
     } catch (err) {
       return res.json(err);
     }
 
-    return res.status(200).json({ message: "Perfis do usuári atualizados!" })
+    return res.status(200).json({ message: "escala atualizada!" })
   },
 }
