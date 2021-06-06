@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { GroupsUsers } from "../models/GroupsUsers";
 import { Groups } from "../models/Groups";
+import { Users } from "../models/Users";
 import * as Yup from "yup";
 
 export default {
@@ -25,6 +26,7 @@ export default {
     }
 
     const groupsRepository = getRepository(Groups);
+    const usersRepository = getRepository(Users);
 
     const group = await groupsRepository.findOne(id_group);
 
@@ -36,6 +38,12 @@ export default {
 
     try {
       users.forEach(async (user: any) => {
+        const userExists = await usersRepository.findOne(user);
+
+        if (!userExists) {
+          return res.status(400).json({ message: "Usuário não existente informado" });
+        }
+
         const newGroupUser = groupsUsersRepository.create({
           id_group: id_group,
           id_user: user
@@ -47,6 +55,8 @@ export default {
     } catch (err) {
       return res.json(err);
     }
+
+    return res.status(200).json({ message: "Usuários adicionados ao grupo com sucesso!" });
   },
 
   async findAllUsersOfOneGroup(req: Request, res: Response) {
@@ -64,7 +74,7 @@ export default {
     let groupUsers = {};
 
     try {
-      groupUsers = await groupsUsersRepository.find({ where: {id_group: id} })
+      groupUsers = await groupsUsersRepository.find({ where: {id_group: id}, loadRelationIds: true })
     } catch (err) {
       return res.json(err);
     }
@@ -72,48 +82,72 @@ export default {
     return res.json(groupUsers);
   },
 
-  async updateUsersOfOneGroup(req: Request, res: Response) {
-    const { users, id_action, id_group } = req.body;
+  async unattachUsersOfOneGroup(req: Request, res: Response) {
+    const { users, id_group } = req.body;
 
-    if (!Array.isArray(users)) {
-      return res.status(401).json({ 
-        message: "Objeto profiles informado em formato incorreto! É preciso ser um array" 
+    const schema = Yup.object().shape({
+      id_group: Yup.number().integer().required(),
+      users: Yup.array().of(
+        Yup.number().positive().integer()
+      ).min(1).required()
+    });
+    
+    const data = {
+      id_group: id_group,
+      users: users
+    };
+    
+    console.log(data);
+
+    if (!await schema.isValid(data)) {
+      return res.json({ message: "Informação enviada de forma incorreta" });
+    } 
+
+    /* TESTANDO A IMPLEMENTAÇÃO DISTO AINDA
+    await schema.validate(data).catch((err: Yup.ValidationError) =>{
+      console.log("validando")
+      return res.status(400).json({
+        Cause: err.name,
+        Message: err.message
       });
-    }
-
-    if (users.length === 0) {
-      return res.status(401).json({ message: "É necessário informar ao menos 1 perfil!" });
-    }
-
+    }); */
+    
+    const groupsRepository = getRepository(Groups);
     const groupsUsersRepository = getRepository(GroupsUsers);
+    const usersRepository = getRepository(Users);
 
-    try {
-      switch(id_action){
-        case 1:
-          // Action 1 será para atualização, incremento de perfis
-          users.forEach(async user => {
-            const newUserProfile = groupsUsersRepository.create({
-              id_user: user,
-              id_group: id_group
-            }); 
+    const group = await groupsRepository.findOne(id_group);
 
-            await groupsUsersRepository.save(newUserProfile);
-          });
-        break;
-            
-        case 2: 
-          // Action 2 será para atualização, remoção de perfis
-          users.forEach(async user => {
-            await groupsUsersRepository.delete({ id_user: user, id_group: id_group });
-          });
-        break;
-        default:
-          return res.status(401).json({ message: "Ação desconhecida, favor informar uma válida!" });
-      }     
-    } catch (err) {
-      return res.json(err);
+    if (!group) {
+      return res.status(400).json({ message: "Grupo informado não existe" });
     }
 
-    return res.status(200).json({ message: "Perfis do usuári atualizados!" })
+  /*  users.forEach(async (user: any) => {
+      const userExists = await usersRepository.findOne(user);
+
+      if (!userExists) {
+        return res.status(400).json({ message: "Usuário não existente informado" });
+      }
+      
+      await groupsUsersRepository.delete({ id_user: user, id_group: id_group });
+    }); */
+
+    console.log(users.length);
+    console.log(users[0]);
+
+    for (let control = 0; control >= users.lenght; control ++) {
+      const userExists = await usersRepository.findOne(users[control]);
+
+      console.log(users[control]);
+
+      if (!userExists) {
+        return res.status(400).json({ message: "Usuário não existente informado" });
+      }
+
+      await groupsUsersRepository.delete({ id_user: users[control], id_group: id_group });
+    }
+
+    return res.status(200).json({ message: "Usuários removidos do grupo!" })
   },
 }
+

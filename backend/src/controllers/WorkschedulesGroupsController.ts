@@ -48,6 +48,8 @@ export default {
     } catch (err) {
       return res.json(err);
     }
+
+    return res.status(201).json({ message: "Grupos associados com sucesso!" });
   },
 
   async findAllGroupsOfOneWorkschedule(req: Request, res: Response) {
@@ -65,7 +67,7 @@ export default {
     let workscheduleGroup = {};
 
     try {
-      workscheduleGroup = await workschedulesGroupsRepository.find({ where: {id_workschedule: id} })
+      workscheduleGroup = await workschedulesGroupsRepository.find({ where: {id_workschedule: id},  loadRelationIds: true })
     } catch (err) {
       return res.json(err);
     }

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { Owners } from "../models/Owners";
+import OwnersView from "../views/OwnersView";
 
 export default {
   async create(req: Request, res: Response) {
@@ -29,7 +30,7 @@ export default {
 
   async findAll(req: Request, res: Response) {
     const ownersRepository = getRepository(Owners);
-    let owners = {};
+    let owners = [];
 
     try {
      owners = await ownersRepository.find();
@@ -37,22 +38,22 @@ export default {
       return res.json(err);
     }
   
-    return res.json(owners);
+    return res.json(OwnersView.renderMany(owners));
   },
 
   async findOne(req: Request, res: Response){
     const { id } = req.params;
 
     const ownersRepository = getRepository(Owners);
-    let owners = {};
+    let owner;
 
     try {
-      owners = await ownersRepository.findOneOrFail(id);
+      owner = await ownersRepository.findOneOrFail(id);
     } catch (err) {
       return res.json(err);
     }
 
-    return res.status(200).json(owners);
+    return res.status(200).json(OwnersView.render(owner));
   },
 
   async update(req: Request, res: Response) {

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { Users } from "../models/Users";
 import * as Yup from "yup";
+import UsersView from "../views/UsersView";
 
 export default {
   async create(req: Request, res: Response) {
@@ -41,7 +42,7 @@ export default {
 
   async findAll(req: Request, res: Response) {
     const usersRepository = getRepository(Users);
-    let users = {};
+    let users = [];
 
     try {
       users = await usersRepository.find();
@@ -49,14 +50,14 @@ export default {
       return res.json(err);
     }
     
-    return res.json(users);
+    return res.json(UsersView.renderMany(users));
   },
 
   async findOne(req: Request, res: Response){
     const { id } = req.params;
 
     const usersRepository = getRepository(Users);
-    let user = {};
+    let user;
 
     try {
       user = await usersRepository.findOneOrFail({ loadRelationIds: true, where: { id_user: id } });
@@ -64,7 +65,7 @@ export default {
       return res.json(err);
     }
 
-    return res.status(200).json(user);
+    return res.status(200).json(UsersView.render(user));
   },
 
   async update(req: Request, res: Response) {

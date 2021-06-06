@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import { Groups } from "./Groups";
 import { Users } from "./Users";
 
-@Entity("inf_association_groups_users")
+@Entity("association_groups_users")
 export class GroupsUsers {
 
   @PrimaryGeneratedColumn({type:"integer"})

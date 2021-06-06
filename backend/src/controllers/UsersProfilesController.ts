@@ -96,7 +96,7 @@ export default {
           });
         break;
         default:
-          return res.status(401).json({ message: "Ação desconhecida, favor informar uma válida!" });
+          return res.status(400).json({ message: "Ação desconhecida, favor informar uma válida!" });
       }     
     } catch (err) {
       return res.json(err);

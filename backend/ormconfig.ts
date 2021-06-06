@@ -33,7 +33,7 @@ export default {
     "migrationsDir": "./src/database/migrations"
   },
   // Aqui é uma configuração para definir que Todas as tabelas terão esse prefixo em seus nomes
-  "entityPrefix": [
+ "entityPrefix": [
     "inf_"
   ]
 }

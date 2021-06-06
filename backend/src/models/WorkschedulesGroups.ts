@@ -3,7 +3,7 @@ import { Workschedules } from "./Workschedules";
 import { Groups } from "./Groups";
 
 
-@Entity("association_groups_workschedules")
+@Entity("association_workschedules_groups")
 export class WorkschedulesGroups {
 
   @PrimaryGeneratedColumn({type:"integer"})
