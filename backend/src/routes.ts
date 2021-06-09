@@ -14,19 +14,19 @@ const routes = Router();
 
 routes.post("/authenticate", SessionController.authenticate);
 
-routes.get("/users", UsersController.findAll);
-routes.get("/users/:id", UsersController.findOne);
+routes.get("/users/id_owner", UsersController.findAll);
+routes.get("/users/:id_user", UsersController.findOne);
 routes.get("/owners", OwnersController.findAll);
-routes.get("/owners/:id", OwnersController.findOne);
-routes.get("/groups", GroupsController.findAll);
-routes.get("/groups/:id", GroupsController.findOne);
-routes.get("/workschedules/:id", WorkschedulesController.findAll);
-routes.get("/workschedules/:id/:id_owner", WorkschedulesController.findOne);
+routes.get("/owners/:id_owner", OwnersController.findOne);
+routes.get("/groups/:id_owner", GroupsController.findAll);
+routes.get("/groups/:id_group/:id_owner", GroupsController.findOne);
+routes.get("/workschedules/:id_owner", WorkschedulesController.findAll);
+routes.get("/workschedules/:id_workschedule/:id_owner", WorkschedulesController.findOne);
 routes.get("/profiles", ProfilesController.findAll);
-routes.get("/profiles/:id", ProfilesController.findOne);
-routes.get("/usersprofiles/:id", UsersProfilesController.findAllProfilesOfOneUser);
-routes.get("/groupsusers/:id", GroupsUsersController.findAllUsersOfOneGroup);
-routes.get("/workschedulesgroups/:id", WorkschedulesGroupsController.findAllGroupsOfOneWorkschedule);
+routes.get("/profiles/:id_profile", ProfilesController.findOne);
+routes.get("/usersprofiles/:id_user", UsersProfilesController.findAllProfilesOfOneUser);
+routes.get("/groupsusers/:id_group", GroupsUsersController.findAllUsersOfOneGroup);
+routes.get("/workschedulesgroups/:id_workschedule", WorkschedulesGroupsController.findAllGroupsOfOneWorkschedule);
 
 routes.post("/users", UsersController.create);
 routes.post("/owners", OwnersController.create);
@@ -37,18 +37,18 @@ routes.post("/usersprofiles", UsersProfilesController.attachProfilesToOneUser);
 routes.post("/groupsusers", GroupsUsersController.attachUsersToOneGroup);
 routes.post("/workschedulesgroups", WorkschedulesGroupsController.attachGroupsToOneWorkschedule);
 
-routes.put("/users/:id", UsersController.update);
-routes.put("/owners/:id", OwnersController.update);
-routes.put("/groups/:id", GroupsController.update);
-routes.put("/workschedules/:id", WorkschedulesController.update);
-routes.put("/profiles/:id", ProfilesController.update);
+routes.put("/users/:id_user", UsersController.update);
+routes.put("/owners/:id_owner", OwnersController.update);
+routes.put("/groups/:id_group", GroupsController.update);
+routes.put("/workschedules/:id_workschedule", WorkschedulesController.update);
+routes.put("/profiles/:id_profile", ProfilesController.update);
 routes.put("/usersprofiles", UsersProfilesController.updateUserProfiles);
 routes.put("/groupsusers", GroupsUsersController.unattachUsersOfOneGroup);
 
-routes.delete("/users/:id", UsersController.delete);
-routes.delete("/owners/:id", OwnersController.delete);
-routes.delete("/groups/:id", GroupsController.delete);
-routes.delete("/workschedules/:id", WorkschedulesController.delete);
-routes.delete("/profiles/:id", ProfilesController.delete);
+routes.delete("/users/:id_user", UsersController.delete);
+routes.delete("/owners/:id_owner", OwnersController.delete);
+routes.delete("/groups/:id_group", GroupsController.delete);
+routes.delete("/workschedules/:id_workschedule", WorkschedulesController.delete);
+routes.delete("/profiles/:id_profile", ProfilesController.delete);
 
 export default routes;

@@ -40,13 +40,13 @@ export default {
   },
 
   async findOne(req: Request, res: Response) {
-    const { id } = req.params;
+    const { id_profile } = req.params;
 
     const profilesRepository = getRepository(Profiles);
     let profile = {};
 
     try {   
-      profile = await profilesRepository.findOneOrFail(id);
+      profile = await profilesRepository.findOneOrFail(id_profile);
     } catch (err) {
       return res.status(400).json(err);
     }
@@ -56,14 +56,14 @@ export default {
 
   async update(req: Request, res: Response) {
     const { name } = req.body;
-    const { id } = req.params;
+    const { id_profile } = req.params;
 
     const profilesRepository = getRepository(Profiles);
 
     try {
-      const profileData = await profilesRepository.findOneOrFail(id);
+      const profileData = await profilesRepository.findOneOrFail(id_profile);
 
-      await profilesRepository.update(id, {
+      await profilesRepository.update(id_profile, {
         name: name ? name : profileData?.name
       });
     } catch (err) {
@@ -74,12 +74,12 @@ export default {
   },
 
   async delete(req: Request, res: Response) {
-    const { id } = req.params;
+    const { id_profile } = req.params;
 
     const profilesRepository = getRepository(Profiles);
 
     try { 
-      await profilesRepository.delete(id);
+      await profilesRepository.delete(id_profile);
     } catch (err) {
       return res.status(400).json(err);
     }

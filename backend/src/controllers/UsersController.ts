@@ -24,11 +24,11 @@ export default {
     };
 
     if (!schema.validate(userData)) {
-      return res.status(401).json({ message: "Dado informado incorretamente",   });
+      return res.status(401).json({ message: "Dado informado incorretamente"  });
     }
 
     const usersRepository = getRepository(Users);
-    let user = {};
+    let user: Users;
 
     try {
       user = usersRepository.create(userData);
@@ -37,15 +37,17 @@ export default {
       return res.json(err);
     }
 
-    return res.status(201).json({ message: "Usuário criado!", user});
+    return res.status(201).json(UsersView.render(user));
   },
 
   async findAll(req: Request, res: Response) {
+    const { id_owner } = req.params;
+
     const usersRepository = getRepository(Users);
     let users = [];
 
     try {
-      users = await usersRepository.find();
+      users = await usersRepository.find({ where: { id_owner: id_owner } });
     } catch (err) {
       return res.json(err);
     }
@@ -54,13 +56,13 @@ export default {
   },
 
   async findOne(req: Request, res: Response){
-    const { id } = req.params;
+    const { id_user } = req.params;
 
     const usersRepository = getRepository(Users);
     let user;
 
     try {
-      user = await usersRepository.findOneOrFail({ loadRelationIds: true, where: { id_user: id } });
+      user = await usersRepository.findOneOrFail({ loadRelationIds: true, where: { id_user: id_user } });
     } catch (err) {
       return res.json(err);
     }
@@ -70,7 +72,7 @@ export default {
 
   async update(req: Request, res: Response) {
     const { name, login, password } = req.body;
-    const { id } = req.params;
+    const { id_user } = req.params;
 
     const schema = Yup.object().shape({
       name: Yup.string(),
@@ -91,13 +93,13 @@ export default {
     const usersRepository = getRepository(Users);
     
     try {
-      const userData = await usersRepository.findOne(id);
+      const userData = await usersRepository.findOne(id_user);
 
       if (!userData) {
         return res.status(400).json({ message: "Usuário não econtrado!" });
       }
 
-      await usersRepository.update(id, {
+      await usersRepository.update(id_user, {
         name: name ? name : userData?.name,
         login: login ? login : userData?.login,
         password: password ? password : userData?.password
@@ -110,18 +112,18 @@ export default {
   },
 
   async delete(req: Request, res: Response) {
-    const { id } = req.params;
+    const { id_user } = req.params;
 
     const usersRepository = getRepository(Users);
 
-    const userData = await usersRepository.findOne(id);
+    const userData = await usersRepository.findOne(id_user);
 
     if (!userData) {
       return res.status(400).json({ message: "Usuário não econtrado!" });
     }
 
     try {
-      await usersRepository.delete(id);
+      await usersRepository.delete(id_user);
     } catch (err) {
       return res.json(err);
     }

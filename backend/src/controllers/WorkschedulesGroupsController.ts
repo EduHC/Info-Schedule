@@ -53,11 +53,11 @@ export default {
   },
 
   async findAllGroupsOfOneWorkschedule(req: Request, res: Response) {
-    const { id } = req.params;
+    const { id_workschedule } = req.params;
 
     const workschedulesRepository = getRepository(Workschedules);
 
-    const workschedule = await workschedulesRepository.findOne(id);
+    const workschedule = await workschedulesRepository.findOne(id_workschedule);
 
     if (!workschedule) {
       return res.status(400).json({ message: "Escala informada não existe" });
@@ -67,7 +67,7 @@ export default {
     let workscheduleGroup = {};
 
     try {
-      workscheduleGroup = await workschedulesGroupsRepository.find({ where: {id_workschedule: id},  loadRelationIds: true })
+      workscheduleGroup = await workschedulesGroupsRepository.find({ where: {id_workschedule: id_workschedule},  loadRelationIds: true })
     } catch (err) {
       return res.json(err);
     }

@@ -60,11 +60,11 @@ export default {
   },
 
   async findAllUsersOfOneGroup(req: Request, res: Response) {
-    const { id } = req.params;
+    const { id_group } = req.params;
 
     const groupsRepository = getRepository(Groups);
 
-    const group = await groupsRepository.findOne(id);
+    const group = await groupsRepository.findOne(id_group);
 
     if (!group) {
       return res.status(400).json({ message: "Grupo informado não existe" });
@@ -74,7 +74,7 @@ export default {
     let groupUsers = {};
 
     try {
-      groupUsers = await groupsUsersRepository.find({ where: {id_group: id}, loadRelationIds: true })
+      groupUsers = await groupsUsersRepository.find({ where: {id_group: id_group}, loadRelationIds: true })
     } catch (err) {
       return res.json(err);
     }

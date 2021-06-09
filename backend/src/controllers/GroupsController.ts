@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
-import { Groups } from  "../models/Groups"
+import { Groups } from  "../models/Groups";
+import GroupsView from "../views/GroupsView";
 
 export default {
   async create(req: Request, res: Response) {
@@ -17,7 +18,7 @@ export default {
     let group = {};
   
     try {
-      group = await groupsRepository.create(groupData);
+      group = groupsRepository.create(groupData);
       await groupsRepository.save(group);
       
     } catch (err) {
@@ -28,31 +29,60 @@ export default {
   },
 
   async findAll(req: Request, res: Response) {
+    const { id_owner } = req.params;
+
     const groupsRepository = getRepository(Groups);
     let groups = {};
 
     try {
-      groups = await groupsRepository.find();
+      groups = await groupsRepository.query(`
+        SELECT infGroups.id_group, 
+               infGroups.start_hour, 
+               infGroups.end_hour, 
+               users.id_user, 
+               users.name
+          FROM inf_entity_groups AS infGroups
+         INNER JOIN inf_association_groups_users AS groups_users
+            ON infGroups.id_group = groups_users.id_group
+         INNER JOIN inf_entity_users AS users
+            ON groups_users.id_user = users.id_user
+         WHERE infGroups.id_owner = ${id_owner}
+         ORDER BY infGroups.id_group DESC;
+      `);
     } catch (err) {
       return res.json(err);
     }
 
-    return res.json(groups);
+    return res.json(GroupsView.render(groups));
   },
 
   async findOne(req: Request, res: Response) {
-    const { id } = req.params;
+    const { id_group, id_owner } = req.params;
 
     const groupsRepository = getRepository(Groups);
     let group = {};
 
     try {
-      group = await groupsRepository.findOneOrFail(id);
+      group = await groupsRepository.query(`
+        SELECT infGroups.id_group, 
+               infGroups.start_hour, 
+               infGroups.end_hour, 
+               users.id_user, 
+               users.name
+          FROM inf_entity_groups AS infGroups
+         INNER JOIN inf_association_groups_users AS groups_users
+            ON infGroups.id_group = groups_users.id_group
+         INNER JOIN inf_entity_users AS users
+            ON groups_users.id_user = users.id_user
+         WHERE infGroups.id_group = ${id_group}
+           AND infGroups.id_owner = ${id_owner}
+         ORDER BY infGroups.id_group DESC;
+      `);
     } catch (err) {
       return res.json(err);
     }
 
-    return res.status(200).json(group);
+    return res.status(200).json(GroupsView.render(group));
   },
 
   async update(req: Request, res: Response) {

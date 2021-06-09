@@ -26,7 +26,7 @@ export default {
   },
 
   async findAll(req: Request, res: Response) {
-    const { id } = req.params;
+    const { id_owner } = req.params;
     
     const workschedulesRepository = getRepository(Workschedules);
     let workschedules = {};
@@ -49,7 +49,7 @@ export default {
           ON groups_users.id_group = infGroups.id_group
        INNER JOIN inf_entity_users AS users
           ON users.id_user = groups_users.id_user
-       WHERE workschedule.id_owner = ${id}
+       WHERE workschedule.id_owner = ${id_owner}
        ORDER BY workschedule.id_workschedule, infGroups.id_group ASC;
   `);
     } catch (err) {
@@ -60,7 +60,7 @@ export default {
   },
 
   async findOne(req: Request, res: Response) {
-    const { id, id_owner } = req.params;
+    const { id_workschedule, id_owner } = req.params;
 
     const workschedulesRepository = getRepository(Workschedules);
     let workschedule = {};
@@ -84,7 +84,7 @@ export default {
            INNER JOIN inf_entity_users AS users
               ON users.id_user = groups_users.id_user
            WHERE workschedule.id_owner = ${id_owner}
-             AND workschedule.id_workschedule = ${id}
+             AND workschedule.id_workschedule = ${id_workschedule}
            ORDER BY workschedule.id_workschedule, infGroups.id_group ASC;
       `);
     } catch (err) {
@@ -97,12 +97,12 @@ export default {
 
   async update(req: Request, res: Response) {
     const { date } = req.body;
-    const { id } = req.params;
+    const { id_workschedule } = req.params;
 
     const workschedulesRepository = getRepository(Workschedules);
 
     try {
-      await workschedulesRepository.update(id, {
+      await workschedulesRepository.update(id_workschedule, {
         date: date
       });
     } catch (err) {
@@ -113,12 +113,12 @@ export default {
   },
 
   async delete(req: Request, res: Response) {
-    const { id } = req.params;
+    const { id_workschedule } = req.params;
 
     const workschedulesRepository = getRepository(Workschedules);
 
     try {
-      await workschedulesRepository.delete(id);
+      await workschedulesRepository.delete(id_workschedule);
     } catch (err) {
       return res.json(err);
     }

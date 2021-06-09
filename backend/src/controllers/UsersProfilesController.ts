@@ -40,13 +40,13 @@ export default {
   },
 
   async findAllProfilesOfOneUser(req: Request, res: Response) {
-    const { id } = req.params;
+    const { id_user } = req.params;
 
     const usersProfilesRepository = getRepository(UsersProfiles);
     let userProfiles = {};
 
     try {
-      userProfiles = await usersProfilesRepository.find({ where: {id_user: id} })
+      userProfiles = await usersProfilesRepository.find({ where: {id_user: id_user} })
     } catch (err) {
       return res.json(err);
     }

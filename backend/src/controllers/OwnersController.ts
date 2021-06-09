@@ -42,13 +42,13 @@ export default {
   },
 
   async findOne(req: Request, res: Response){
-    const { id } = req.params;
+    const { id_owner } = req.params;
 
     const ownersRepository = getRepository(Owners);
     let owner;
 
     try {
-      owner = await ownersRepository.findOneOrFail(id);
+      owner = await ownersRepository.findOneOrFail(id_owner);
     } catch (err) {
       return res.json(err);
     }
@@ -58,14 +58,14 @@ export default {
 
   async update(req: Request, res: Response) {
     const { name, company_name, CNPJ, phone } = req.body;
-    const { id } = req.params;
+    const { id_owner } = req.params;
 
     const ownersRepository = getRepository(Owners);
 
     try {
-      const ownerData = await ownersRepository.findOne(id);
+      const ownerData = await ownersRepository.findOne(id_owner);
 
-      await ownersRepository.update(id, {
+      await ownersRepository.update(id_owner, {
         name: name ? name : ownerData?.name,
         company_name: company_name ? company_name : ownerData?.company_name,
         CNPJ: CNPJ ? CNPJ : ownerData?.CNPJ,
@@ -79,12 +79,12 @@ export default {
   },
 
   async delete(req: Request, res: Response) {
-    const { id } = req.params;
+    const { id_owner } = req.params;
 
     const ownersRepository = getRepository(Owners);
 
     try {
-      ownersRepository.delete(id);
+      ownersRepository.delete(id_owner);
     } catch (err) {
       return res.json(err);
     }
