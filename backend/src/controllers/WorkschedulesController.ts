@@ -26,7 +26,6 @@ export default {
   },
 
   async findAll(req: Request, res: Response) {
-    const { id_owner } = req.params;
     
     const workschedulesRepository = getRepository(Workschedules);
     let workschedules = {};
@@ -49,7 +48,6 @@ export default {
           ON groups_users.id_group = infGroups.id_group
        INNER JOIN inf_entity_users AS users
           ON users.id_user = groups_users.id_user
-       WHERE workschedule.id_owner = ${id_owner}
        ORDER BY workschedule.id_workschedule, infGroups.id_group ASC;
   `);
     } catch (err) {
@@ -60,7 +58,7 @@ export default {
   },
 
   async findOne(req: Request, res: Response) {
-    const { id_workschedule, id_owner } = req.params;
+    const { id_workschedule } = req.params;
 
     const workschedulesRepository = getRepository(Workschedules);
     let workschedule = {};
@@ -83,8 +81,7 @@ export default {
               ON groups_users.id_group = infGroups.id_group
            INNER JOIN inf_entity_users AS users
               ON users.id_user = groups_users.id_user
-           WHERE workschedule.id_owner = ${id_owner}
-             AND workschedule.id_workschedule = ${id_workschedule}
+           WHERE workschedule.id_workschedule = ${id_workschedule}
            ORDER BY workschedule.id_workschedule, infGroups.id_group ASC;
       `);
     } catch (err) {

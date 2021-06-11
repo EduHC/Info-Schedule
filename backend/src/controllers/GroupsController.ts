@@ -29,7 +29,6 @@ export default {
   },
 
   async findAll(req: Request, res: Response) {
-    const { id_owner } = req.params;
 
     const groupsRepository = getRepository(Groups);
     let groups = {};
@@ -46,7 +45,6 @@ export default {
             ON infGroups.id_group = groups_users.id_group
          INNER JOIN inf_entity_users AS users
             ON groups_users.id_user = users.id_user
-         WHERE infGroups.id_owner = ${id_owner}
          ORDER BY infGroups.id_group DESC;
       `);
     } catch (err) {
@@ -57,7 +55,7 @@ export default {
   },
 
   async findOne(req: Request, res: Response) {
-    const { id_group, id_owner } = req.params;
+    const { id_group } = req.params;
 
     const groupsRepository = getRepository(Groups);
     let group = {};
@@ -75,7 +73,6 @@ export default {
          INNER JOIN inf_entity_users AS users
             ON groups_users.id_user = users.id_user
          WHERE infGroups.id_group = ${id_group}
-           AND infGroups.id_owner = ${id_owner}
          ORDER BY infGroups.id_group DESC;
       `);
     } catch (err) {

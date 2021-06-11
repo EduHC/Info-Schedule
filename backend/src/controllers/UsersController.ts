@@ -41,13 +41,12 @@ export default {
   },
 
   async findAll(req: Request, res: Response) {
-    const { id_owner } = req.params;
 
     const usersRepository = getRepository(Users);
     let users = [];
 
     try {
-      users = await usersRepository.find({ where: { id_owner: id_owner } });
+      users = await usersRepository.find();
     } catch (err) {
       return res.json(err);
     }

@@ -14,14 +14,14 @@ const routes = Router();
 
 routes.post("/authenticate", SessionController.authenticate);
 
-routes.get("/users/id_owner", UsersController.findAll);
+routes.get("/users", UsersController.findAll);
 routes.get("/users/:id_user", UsersController.findOne);
 routes.get("/owners", OwnersController.findAll);
 routes.get("/owners/:id_owner", OwnersController.findOne);
-routes.get("/groups/:id_owner", GroupsController.findAll);
-routes.get("/groups/:id_group/:id_owner", GroupsController.findOne);
-routes.get("/workschedules/:id_owner", WorkschedulesController.findAll);
-routes.get("/workschedules/:id_workschedule/:id_owner", WorkschedulesController.findOne);
+routes.get("/groups", GroupsController.findAll);
+routes.get("/groups/:id_group", GroupsController.findOne);
+routes.get("/workschedules", WorkschedulesController.findAll);
+routes.get("/workschedules/:id_workschedule", WorkschedulesController.findOne);
 routes.get("/profiles", ProfilesController.findAll);
 routes.get("/profiles/:id_profile", ProfilesController.findOne);
 routes.get("/usersprofiles/:id_user", UsersProfilesController.findAllProfilesOfOneUser);

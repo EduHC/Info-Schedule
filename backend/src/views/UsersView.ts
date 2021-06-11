@@ -10,7 +10,7 @@ export default {
     }
   },
 
-  renderMany(user: Users[]) {
-    return user.map(user => this.render(user));
+  renderMany(users: Users[]) {
+    return users.map(user => this.render(user));
   }
 }
