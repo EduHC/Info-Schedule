@@ -36,7 +36,8 @@ export default {
              workschedule.date, 
              workschedule_groups.id_group, 
              infGroups.start_hour, 
-             infGroups.end_hour, 
+             infGroups.end_hour,
+             infGroups.name AS groupName, 
              users.id_user, 
              users.name
         FROM inf_entity_workschedules AS workschedule
@@ -69,7 +70,8 @@ export default {
                  workschedule.date, 
                  workschedule_groups.id_group, 
                  infGroups.start_hour, 
-                 infGroups.end_hour, 
+                 infGroups.end_hour,
+                 infGroups.name AS groupName, 
                  users.id_user, 
                  users.name
             FROM inf_entity_workschedules AS workschedule

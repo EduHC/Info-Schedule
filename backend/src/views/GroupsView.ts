@@ -3,6 +3,7 @@ interface IRawGroups {
   start_hour: string,
   end_hour: string,
   id_user: number,
+  groupName: string,
   name: string
 }
 
@@ -11,17 +12,11 @@ interface IUsers {
   name: string
 }
 
-interface IGroups {
-  id_group: number,
-  start_hour: string,
-  end_hour: string,
-  users: Array<IUsers>
-}
-
 interface IGroupData {
   id_group: number,
   start_hour: string,
-  end_hour: string
+  end_hour: string,
+  groupName: string
 }
 
 let groupsControl: number[] = [];
@@ -71,7 +66,6 @@ export default {
     }
 
     let users: IUsers[] = [];
-    let groups: IGroups[] = [];
     let groupData: IGroupData;
     let counter: number = 0;
 
@@ -93,6 +87,7 @@ export default {
             id_group: groupData.id_group,
             start_hour: groupData.start_hour,
             end_hour: groupData.end_hour,
+            groupName: groupData.groupName,
             users: users
           });
 
@@ -112,7 +107,8 @@ export default {
         groupData = {
           id_group: row.id_group,
           start_hour: row.start_hour,
-          end_hour: row.end_hour
+          end_hour: row.end_hour,
+          groupName: row.groupName
         }
       }
 
@@ -121,6 +117,7 @@ export default {
           id_group: groupData.id_group,
           start_hour: groupData.start_hour,
           end_hour: groupData.end_hour,
+          groupName: groupData.groupName,
           users: users
         });
       }

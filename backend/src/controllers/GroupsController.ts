@@ -19,13 +19,13 @@ export default {
   
     try {
       group = groupsRepository.create(groupData);
-      await groupsRepository.save(group);
+      group = await groupsRepository.save(group);
       
     } catch (err) {
       return res.json(err);
     }
 
-    return res.status(201).json({ message: "grupo criado"});
+    return res.status(201).json({ message: "grupo criado", group});
   },
 
   async findAll(req: Request, res: Response) {
@@ -37,7 +37,8 @@ export default {
       groups = await groupsRepository.query(`
         SELECT infGroups.id_group, 
                infGroups.start_hour, 
-               infGroups.end_hour, 
+               infGroups.end_hour,
+               infGroups.name AS groupName, 
                users.id_user, 
                users.name
           FROM inf_entity_groups AS infGroups
@@ -64,7 +65,8 @@ export default {
       group = await groupsRepository.query(`
         SELECT infGroups.id_group, 
                infGroups.start_hour, 
-               infGroups.end_hour, 
+               infGroups.end_hour,
+               infGroups.name AS groupName, 
                users.id_user, 
                users.name
           FROM inf_entity_groups AS infGroups

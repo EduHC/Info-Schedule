@@ -5,6 +5,7 @@ interface IRawWorkschedule {
   end_hour: string,
   id_user: number,
   name: string,
+  groupName: string,
   date: Date
 }
 
@@ -16,7 +17,8 @@ interface IUsers {
 interface IGroups {
   id_group: number,
   start_hour: string,
-  end_hour: string
+  end_hour: string,
+  groupName: string,
   users: Array<IUsers>
 }
 
@@ -28,7 +30,8 @@ interface IWorkscheduleData {
 interface IGroupData {
   id_group: number,
   start_hour: string,
-  end_hour: string
+  end_hour: string,
+  groupName: string
 }
 
 
@@ -120,6 +123,7 @@ export default {
             id_group: groupData.id_group,
             start_hour: groupData.start_hour,
             end_hour: groupData.end_hour,
+            groupName: groupData.groupName,
             users: users
           });
 
@@ -139,7 +143,8 @@ export default {
         groupData = {
           id_group: row.id_group,
           start_hour: row.start_hour,
-          end_hour: row.end_hour
+          end_hour: row.end_hour,
+          groupName: row.groupName
         }
       }
 
@@ -174,6 +179,7 @@ export default {
           id_group: groupData.id_group,
           start_hour: groupData.start_hour,
           end_hour: groupData.end_hour,
+          groupName: groupData.groupName,
           users: users
         });
 
