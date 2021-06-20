@@ -1,36 +1,57 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { getRepository } from "typeorm";
+import { BaseError, ValidationError } from "../errors/Errors";
 import { Workschedules } from "../models/Workschedules";
+import { Owners } from "../models/Owners";
+import { HttpStatusCode } from "../utils/HttpStatusCode";
 import WorkscheduleView from "../views/WorkschedulesView";
+import * as Yup from "yup";
 
 export default {
-  async create(req: Request, res: Response) {
+  async create(req: Request, res: Response, next: NextFunction) {
     const { id_owner, date } = req.body;
 
-    const workscheduleData = {
-      id_owner,
-      date
-    };
+    const schema = Yup.object().shape({
+      id_owner: Yup.number().required().integer().positive(),
+      date: Yup.string().required()
+    });
 
-    const workschedulesRepository = getRepository(Workschedules);
-    let workschedule = {};
+    await schema.validate({ id_owner, date })
+      .catch(({ name, errors }: Yup.ValidationError) => {
+        next(new ValidationError(name, errors, true, HttpStatusCode.BAD_REQUEST, "Dados enviados incorretamente"));
+      })
+      .finally(() => {
+        return;
+      });
+
+    let workschedule: Workschedules;
 
     try {
-      workschedule = await workschedulesRepository.create(workscheduleData);
+      const ownersRepository = getRepository(Owners);
+      const workschedulesRepository = getRepository(Workschedules);
+
+      let owner = ownersRepository.findOne(id_owner);
+
+      if (!owner) {
+        throw new BaseError("Empresa não encontrada!", `A empresa ${id_owner} não foi encontrada`, true, HttpStatusCode.BAD_REQUEST);
+      }
+
+      workschedule = workschedulesRepository.create({ id_owner, date });
       await workschedulesRepository.save(workschedule);
     } catch (err) {
-      return res.json(err);
+      next(err);
+      return;
     }
 
     return res.status(201).json({ message: "Escala criada", workschedule })
   },
 
-  async findAll(req: Request, res: Response) {
-    
-    const workschedulesRepository = getRepository(Workschedules);
-    let workschedules = {};
+  async findAll(req: Request, res: Response, next: NextFunction) {
+    let workschedules = [];
 
     try {
+      const workschedulesRepository = getRepository(Workschedules);
+
       workschedules = await workschedulesRepository.query(`
       SELECT workschedule.id_workschedule,
              workschedule.date, 
@@ -50,21 +71,28 @@ export default {
        INNER JOIN inf_entity_users AS users
           ON users.id_user = groups_users.id_user
        ORDER BY workschedule.id_workschedule, infGroups.id_group ASC;
-  `);
+      `);
+
+      if (workschedules.length === 0) {
+        return res.status(200).json({ message: "Nenhuma escala encontrada." });
+      }
+
     } catch (err) {
-      return res.json(err);
+      next(err);
+      return;
     }
-    
+
     return res.json(WorkscheduleView.render(workschedules));
   },
 
-  async findOne(req: Request, res: Response) {
+  async findOne(req: Request, res: Response, next: NextFunction) {
     const { id_workschedule } = req.params;
 
-    const workschedulesRepository = getRepository(Workschedules);
-    let workschedule = {};
+    let workschedule = [];
 
     try {
+      const workschedulesRepository = getRepository(Workschedules);
+
       workschedule = await workschedulesRepository.query(`
           SELECT workschedule.id_workschedule,
                  workschedule.date, 
@@ -86,40 +114,74 @@ export default {
            WHERE workschedule.id_workschedule = ${id_workschedule}
            ORDER BY workschedule.id_workschedule, infGroups.id_group ASC;
       `);
+
+      if (workschedule.length === 0) {
+        throw new BaseError("Escala não encontrada!", `A escala ${id_workschedule} não foi encontrada`, true, HttpStatusCode.BAD_REQUEST);
+      }
+
     } catch (err) {
-      return res.json(err); 
+      next(err);
+      return;
     }
 
-    //console.log(workschedule);
     return res.status(200).json(WorkscheduleView.render(workschedule));
   },
 
-  async update(req: Request, res: Response) {
+  async update(req: Request, res: Response, next: NextFunction) {
     const { date } = req.body;
     const { id_workschedule } = req.params;
 
-    const workschedulesRepository = getRepository(Workschedules);
+    const schema = Yup.object().shape({
+      id_owner: Yup.number().required().integer().positive()
+    });
+
+    await schema.validate({  date })
+      .catch(({ name, errors }: Yup.ValidationError) => {
+        next(new ValidationError(name, errors, true, HttpStatusCode.BAD_REQUEST, "Dados enviados incorretamente"));
+      })
+      .finally(() => {
+        return;
+      });
 
     try {
+      const workschedulesRepository = getRepository(Workschedules);
+
+      let workscheduleExists = await workschedulesRepository.findOne(id_workschedule);
+
+      if (!workscheduleExists) {
+        throw new BaseError("Escala não encontrada!", `A escala ${id_workschedule} não foi encontrada`, true, HttpStatusCode.BAD_REQUEST);
+      }
+
       await workschedulesRepository.update(id_workschedule, {
         date: date
       });
+
     } catch (err) {
-      return res.json(err);
+      next(err);
+      return;
     }
 
     return res.status(200).json({ message: "Escala atualizada" })
   },
 
-  async delete(req: Request, res: Response) {
+  async delete(req: Request, res: Response, next: NextFunction) {
     const { id_workschedule } = req.params;
 
-    const workschedulesRepository = getRepository(Workschedules);
-
     try {
+
+      const workschedulesRepository = getRepository(Workschedules);
+
+      let workscheduleExists = await workschedulesRepository.findOne(id_workschedule);
+
+      if (!workscheduleExists) {
+        throw new BaseError("Escala não encontrada!", `A escala ${id_workschedule} não foi encontrada`, true, HttpStatusCode.BAD_REQUEST);
+      }
+
       await workschedulesRepository.delete(id_workschedule);
+    
     } catch (err) {
-      return res.json(err);
+      next(err);
+      return;
     }
 
     return res.status(200).json({ message: "Escala deletada!" })

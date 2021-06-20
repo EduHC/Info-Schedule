@@ -19,7 +19,7 @@ export default {
   "password": process.env.PASSWORD,
   "database": process.env.DATABASE,
   "synchronize": false,
-  "logging": true,
+  "logging": false,
   //  Aqui é definido o repositório das entidades (arquivos que vão definir quais as tabelas, suas colunas e relacionamentos)
   "entities": [
     "./src/models/*.ts"

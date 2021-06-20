@@ -1,8 +1,4 @@
 /node_modules
 /Resources.txt
 /.env
-/src/errors
-/src/utils
-/src/utils
-/src/workschedule exemple output.json
 .vscode

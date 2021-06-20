@@ -1,25 +1,45 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { Users } from "../models/Users";
 import { UsersProfiles } from "../models/UsersProfiles";
 import { sign } from "jsonwebtoken";
 import UserProfilesView from "../views/UserProfilesView";
+import * as Yup from "yup";
+import { HttpStatusCode } from "../utils/HttpStatusCode";
+import { BaseError, ValidationError } from "../errors/Errors";
 
 export default {
-  async authenticate(req: Request, res: Response) {
+  async authenticate(req: Request, res: Response, next: NextFunction) {
     const { login, password } = req.body;
 
-    const usersRepository = getRepository(Users);
-    const usersProfilesRepository = getRepository(UsersProfiles);
+    const schema = Yup.object().shape({
+      login: Yup.string().required(),
+      password: Yup.string().required()
+    });
 
-    let token;
+    await schema.validate({ login, password })
+    .catch(({ name, errors } : Yup.ValidationError) => {
+      next(new ValidationError(name, errors, true, HttpStatusCode.BAD_REQUEST, "Dados enviados incorretamente"));
+    })
+    .finally(() => {
+      return;
+    });
+
+    let token: any;
 
     try { 
-      const user = await usersRepository.findOne({ where: { login: login, password: password }, loadRelationIds: true });
+      const usersRepository = getRepository(Users);
+      const usersProfilesRepository = getRepository(UsersProfiles);
+  
+      const user: Users = await usersRepository.findOne({ where: { login: login, password: password }, loadRelationIds: true });
       const profiles: UsersProfiles[] = await usersProfilesRepository.find({ where: { id_user: user?.id_user } });
 
       if ( !user ) {
-        return res.status(200).json({ token: "Usuário ou senha errados!" });
+        throw new BaseError("Ops!", `Usuário ou Senha incorretos`, true, HttpStatusCode.BAD_REQUEST);
+      }
+
+      if ( profiles.length === 0 ) {
+        throw new BaseError("Ocorrência inesperada", `Esse usuário não possuí nenhum perfil, por favor vincular a algum.`, true, HttpStatusCode.BAD_REQUEST);
       }
 
       token = sign({
@@ -35,7 +55,8 @@ export default {
       });
 
     } catch (err) {
-      return res.json(err);
+      next(err);
+      return;
     }
 
     return res.status(200).json({ token: token });
