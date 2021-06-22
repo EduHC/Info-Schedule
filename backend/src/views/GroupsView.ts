@@ -8,8 +8,8 @@ interface IRawGroups {
 }
 
 interface IUsers {
-  id_user: number,
-  name: string
+  id_user?: number,
+  name?: string
 }
 
 interface IGroupData {
@@ -24,6 +24,10 @@ let usersControl: number[] = [];
 
 function validateUser(id: number) {
   let result = 0;
+
+  if (id === null) {
+    return 2;
+  }
 
   if (usersControl.length === 0)
     return result;
@@ -69,6 +73,9 @@ export default {
     let groupData: IGroupData;
     let counter: number = 0;
 
+    usersControl.length = 0;
+    groupsControl.length = 0;
+
     data.forEach((row: IRawGroups) => {
       counter++;
 
@@ -79,10 +86,13 @@ export default {
         });
 
         usersControl.push(row.id_user);
+      } else if (validateUser(row.id_user) === 2) {
+        users = [];
       }
     
       if (validateGroup(row.id_group) === 0) {
         if (groupsControl.length !== 0) {
+
           response.groups.push({
             id_group: groupData.id_group,
             start_hour: groupData.start_hour,
@@ -94,10 +104,12 @@ export default {
           users.length = 0;
           usersControl.length = 0;
 
-          users.push({
-            id_user: row.id_user,
-            name: row.name
-          });
+          if (row.id_user !== null && row.name !== null){
+            users.push({
+              id_user: row.id_user,
+              name: row.name
+            });
+          }
 
           usersControl.push(row.id_user);
         }

@@ -44,6 +44,7 @@ routes.put("/workschedules/:id_workschedule", WorkschedulesController.update);
 routes.put("/profiles/:id_profile", ProfilesController.update);
 routes.put("/usersprofiles", UsersProfilesController.unattachProfilesOfOneUser);
 routes.put("/groupsusers", GroupsUsersController.unattachUsersOfOneGroup);
+routes.put("/workschedulesgroups", WorkschedulesGroupsController.unattachGroupsOfOneWorkschedule);
 
 routes.delete("/users/:id_user", UsersController.delete);
 routes.delete("/owners/:id_owner", OwnersController.delete);

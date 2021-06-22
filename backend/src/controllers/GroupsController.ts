@@ -59,10 +59,10 @@ export default {
                infGroups.name AS groupName, 
                users.id_user, 
                users.name
-          FROM inf_entity_groups AS infGroups
-         INNER JOIN inf_association_groups_users AS groups_users
+          FROM inf_association_groups_users AS groups_users
+         RIGHT JOIN inf_entity_groups AS infGroups
             ON infGroups.id_group = groups_users.id_group
-         INNER JOIN inf_entity_users AS users
+          LEFT JOIN inf_entity_users AS users
             ON groups_users.id_user = users.id_user
          ORDER BY infGroups.id_group DESC;
       `);
@@ -88,10 +88,10 @@ export default {
                infGroups.name AS groupName, 
                users.id_user, 
                users.name
-          FROM inf_entity_groups AS infGroups
-         INNER JOIN inf_association_groups_users AS groups_users
+          FROM inf_association_groups_users AS groups_users
+         RIGHT JOIN inf_entity_groups AS infGroups
             ON infGroups.id_group = groups_users.id_group
-         INNER JOIN inf_entity_users AS users
+          LEFT JOIN inf_entity_users AS users
             ON groups_users.id_user = users.id_user
          WHERE infGroups.id_group = ${id_group}
          ORDER BY infGroups.id_group DESC;

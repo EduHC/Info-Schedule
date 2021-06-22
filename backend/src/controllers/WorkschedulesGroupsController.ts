@@ -89,7 +89,7 @@ export default {
     return res.json(workscheduleGroup);
   },
 
-  async updateGroupsOfOneWorkschedule(req: Request, res: Response, next: NextFunction) {
+  async unattachGroupsOfOneWorkschedule(req: Request, res: Response, next: NextFunction) {
     const { groups, id_workschedule } = req.body;
 
     const schema = Yup.object().shape({
