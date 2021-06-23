@@ -61,14 +61,14 @@ export default {
              infGroups.name AS groupName, 
              users.id_user, 
              users.name
-        FROM inf_entity_workschedules AS workschedule
-       INNER JOIN inf_association_workschedules_groups AS workschedule_groups
+        FROM inf_association_workschedules_groups AS workschedule_groups
+       RIGHT JOIN inf_entity_workschedules AS workschedule
           ON workschedule_groups.id_workschedule = workschedule.id_workschedule
-       INNER JOIN inf_entity_groups AS infGroups
+        LEFT JOIN inf_entity_groups AS infGroups
           ON workschedule_groups.id_group = infGroups.id_group
-       INNER JOIN inf_association_groups_users AS groups_users
+        LEFT JOIN inf_association_groups_users AS groups_users
           ON groups_users.id_group = infGroups.id_group
-       INNER JOIN inf_entity_users AS users
+        LEFT JOIN inf_entity_users AS users
           ON users.id_user = groups_users.id_user
        ORDER BY workschedule.id_workschedule, infGroups.id_group ASC;
       `);
@@ -102,14 +102,14 @@ export default {
                  infGroups.name AS groupName, 
                  users.id_user, 
                  users.name
-            FROM inf_entity_workschedules AS workschedule
-           INNER JOIN inf_association_workschedules_groups AS workschedule_groups
+            FROM inf_association_workschedules_groups AS workschedule_groups
+           RIGHT JOIN inf_entity_workschedules AS workschedule
               ON workschedule_groups.id_workschedule = workschedule.id_workschedule
-           INNER JOIN inf_entity_groups AS infGroups
+            LEFT JOIN inf_entity_groups AS infGroups
               ON workschedule_groups.id_group = infGroups.id_group
-           INNER JOIN inf_association_groups_users AS groups_users
+            LEFT JOIN inf_association_groups_users AS groups_users
               ON groups_users.id_group = infGroups.id_group
-           INNER JOIN inf_entity_users AS users
+            LEFT JOIN inf_entity_users AS users
               ON users.id_user = groups_users.id_user
            WHERE workschedule.id_workschedule = ${id_workschedule}
            ORDER BY workschedule.id_workschedule, infGroups.id_group ASC;

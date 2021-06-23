@@ -19,8 +19,14 @@ interface IGroupData {
   groupName: string
 }
 
+
 let groupsControl: number[] = [];
 let usersControl: number[] = [];
+let users: IUsers[] = [];
+let groupData: IGroupData;
+let response: any = {
+  groups: []
+}
 
 function validateUser(id: number) {
   let result = 0;
@@ -58,60 +64,72 @@ function validateGroup(id: number) {
   return result;
 }
 
+function addUsers({ id_user, name }: IRawGroups) {
+  users.push({
+    id_user: id_user,
+    name: name
+  });
+
+  usersControl.push(id_user);
+}
+
+function addGroups() {
+  response.groups.push({
+    id_group: groupData.id_group,
+    start_hour: groupData.start_hour,
+    end_hour: groupData.end_hour,
+    groupName: groupData.groupName,
+    users: [...users]
+  });
+}
+
+function handleRemoveUser(id_user: number) {
+  let temporaryUsers = users.filter(item => {
+    return item.id_user !== id_user
+  });
+
+  users = temporaryUsers;
+}
 
 export default {
   render(data: any) {
-    let response: any = {
-      groups: []
-    }
-
     if (data.length === 0) {
       return response;
     }
 
-    let users: IUsers[] = [];
-    let groupData: IGroupData;
     let counter: number = 0;
 
     usersControl.length = 0;
     groupsControl.length = 0;
+    response.groups.length = 0;
 
     data.forEach((row: IRawGroups) => {
       counter++;
 
       if (validateUser(row.id_user) === 0) {
-        users.push({
-          id_user: row.id_user,
-          name: row.name
-        });
-
-        usersControl.push(row.id_user);
+        addUsers(row);
       } else if (validateUser(row.id_user) === 2) {
+        addGroups();
         users = [];
       }
     
       if (validateGroup(row.id_group) === 0) {
         if (groupsControl.length !== 0) {
 
-          response.groups.push({
-            id_group: groupData.id_group,
-            start_hour: groupData.start_hour,
-            end_hour: groupData.end_hour,
-            groupName: groupData.groupName,
-            users: users
-          });
+          if (users.length !== 0) {
+            handleRemoveUser(row.id_user);
+          }
+
+         if (row.id_user !== null) {
+            addGroups();
+         }
 
           users.length = 0;
           usersControl.length = 0;
 
           if (row.id_user !== null && row.name !== null){
-            users.push({
-              id_user: row.id_user,
-              name: row.name
-            });
+            addUsers(row);
           }
-
-          usersControl.push(row.id_user);
         }
 
         groupsControl.push(row.id_group);
@@ -125,13 +143,11 @@ export default {
       }
 
       if (counter === data.length) {
-        response.groups.push({
-          id_group: groupData.id_group,
-          start_hour: groupData.start_hour,
-          end_hour: groupData.end_hour,
-          groupName: groupData.groupName,
-          users: users
-        });
+        addGroups();
+
+        usersControl.length = 0;
+        groupsControl.length = 0;
+        users.length = 0;
       }
     });
 

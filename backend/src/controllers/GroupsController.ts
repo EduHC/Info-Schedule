@@ -64,7 +64,7 @@ export default {
             ON infGroups.id_group = groups_users.id_group
           LEFT JOIN inf_entity_users AS users
             ON groups_users.id_user = users.id_user
-         ORDER BY infGroups.id_group DESC;
+         ORDER BY infGroups.id_group, users.id_user DESC;
       `);
     } catch (err) {
       next(new BaseError("Situação inesperada!", `Erro ao tentar buscar os grupos.`, true, HttpStatusCode.BAD_REQUEST))

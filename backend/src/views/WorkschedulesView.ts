@@ -34,14 +34,21 @@ interface IGroupData {
   groupName: string
 }
 
-
 let workscheduleControl: number[] = [];
 let groupsControl: number[] = [];
 let usersControl: number[] = [];
-
+let users: IUsers[] = [];
+let groups: IGroups[] = [];
+let workscheduleData: IWorkscheduleData;
+let groupData: IGroupData;
+let counter: number = 0;
 
 function validateUser(id: number) {
   let result = 0;
+
+  if (id === null) {
+    return 2;
+  }
 
   if (usersControl.length === 0)
     return result;
@@ -58,6 +65,10 @@ function validateUser(id: number) {
 
 function validateGroup(id: number) {
   let result = 0;
+
+  if (id === null) {
+    return 2;
+  }
 
   if (groupsControl.length === 0) 
     return result;
@@ -88,6 +99,24 @@ function validateWorkschedule(id: number) {
   return result;
 }
 
+function addUsers({ id_user, name }: IRawWorkschedule) {
+  users.push({
+    id_user: id_user,
+    name: name
+  });
+
+  usersControl.push(id_user);
+}
+
+function addGroups() {
+  groups.push({
+    id_group: groupData.id_group,
+    start_hour: groupData.start_hour,
+    end_hour: groupData.end_hour,
+    groupName: groupData.groupName,
+    users: users
+  });
+}
 
 export default {
   render(data: any) {
@@ -99,43 +128,29 @@ export default {
       return response;
     }
 
-    let users: IUsers[] = [];
-    let groups: IGroups[] = [];
-    let workscheduleData: IWorkscheduleData;
-    let groupData: IGroupData;
-    let counter: number = 0;
-
+    groupsControl.length = 0;
+    usersControl.length = 0;
+    workscheduleControl.length = 0;
+  
     data.forEach((row: IRawWorkschedule) => {
       counter++;
 
       if (validateUser(row.id_user) === 0) {
-        users.push({
-          id_user: row.id_user,
-          name: row.name
-        });
-
-        usersControl.push(row.id_user);
+        addUsers(row);
+      } else if (validateUser(row.id_user) === 2) {
+        addGroups();
+        users = [];
       }
 
       if (validateGroup(row.id_group) === 0) {
         if (groupsControl.length !== 0) {
-          groups.push({
-            id_group: groupData.id_group,
-            start_hour: groupData.start_hour,
-            end_hour: groupData.end_hour,
-            groupName: groupData.groupName,
-            users: users
-          });
+          // Acaba adicionado o mesmo grupo 2x se o user = null
+          addGroups();
 
           users.length = 0;
           usersControl.length = 0;
 
-          users.push({
-            id_user: row.id_user,
-            name: row.name
-          });
-
-          usersControl.push(row.id_user);
+          addUsers(row);
         }
 
         groupsControl.push(row.id_group);
@@ -146,6 +161,8 @@ export default {
           end_hour: row.end_hour,
           groupName: row.groupName
         }
+      } else if (validateGroup(row.id_group) === 2) {
+        groups = [];
       }
 
       if (validateWorkschedule(row.id_workschedule) === 0) {
@@ -175,13 +192,9 @@ export default {
       }
 
       if (counter === data.length) {
-        groups.push({
-          id_group: groupData.id_group,
-          start_hour: groupData.start_hour,
-          end_hour: groupData.end_hour,
-          groupName: groupData.groupName,
-          users: users
-        });
+        if (row.id_group !== null) {
+          addGroups();
+        }
 
         response.workschedules.push({ 
           id_workschedule: workscheduleData.id_workschedule,
