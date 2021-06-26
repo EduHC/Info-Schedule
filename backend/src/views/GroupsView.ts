@@ -93,15 +93,15 @@ function handleRemoveUser(id_user: number) {
 
 export default {
   render(data: any) {
-    if (data.length === 0) {
-      return response;
-    }
-
     let counter: number = 0;
 
     usersControl.length = 0;
     groupsControl.length = 0;
     response.groups.length = 0;
+    
+    if (data.length === 0) {
+      return response;
+    }
 
     data.forEach((row: IRawGroups) => {
       counter++;

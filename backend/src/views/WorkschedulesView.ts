@@ -34,14 +34,16 @@ interface IGroupData {
   groupName: string
 }
 
+let workscheduleData: IWorkscheduleData;
+let groupData: IGroupData;
 let workscheduleControl: number[] = [];
 let groupsControl: number[] = [];
 let usersControl: number[] = [];
 let users: IUsers[] = [];
 let groups: IGroups[] = [];
-let workscheduleData: IWorkscheduleData;
-let groupData: IGroupData;
-let counter: number = 0;
+let response: any = {
+  workschedules: []
+};
 
 function validateUser(id: number) {
   let result = 0;
@@ -99,6 +101,22 @@ function validateWorkschedule(id: number) {
   return result;
 }
 
+function handleRemoveUser(id_user: number) {
+  let temporaryUsers = users.filter(item => {
+    return item.id_user !== id_user
+  });
+
+  users = temporaryUsers;
+}
+
+function handleRemoveGroup(id_group: number) {
+  let temporaryGroups = groups.filter(item => {
+    return item.id_group !== id_group
+  });
+
+  groups = temporaryGroups;
+}
+
 function addUsers({ id_user, name }: IRawWorkschedule) {
   users.push({
     id_user: id_user,
@@ -114,43 +132,74 @@ function addGroups() {
     start_hour: groupData.start_hour,
     end_hour: groupData.end_hour,
     groupName: groupData.groupName,
-    users: users
+    users: [...users]
+  });
+}
+
+function addWorkschedules() {
+  response.workschedules.push({ 
+    id_workschedule: workscheduleData.id_workschedule,
+    date: workscheduleData.date,
+    groups: [...groups]
   });
 }
 
 export default {
   render(data: any) {
-    let response: any = {
-      workschedules: []
-    };
+    let counter: number = 0;
+    let ableToRemoveUser = 0;
+    let ableToRemoveGroup = 0;
+
+    groupData = null;
+    workscheduleData = null;
+    groupsControl.length = 0;
+    usersControl.length = 0;
+    workscheduleControl.length = 0;
+    users.length = 0;
+    groups.length = 0;
+    response.workschedules.length = 0;
 
     if (data.length === 0) {
       return response;
     }
 
-    groupsControl.length = 0;
-    usersControl.length = 0;
-    workscheduleControl.length = 0;
-  
     data.forEach((row: IRawWorkschedule) => {
       counter++;
+      ableToRemoveUser = 0;
+      ableToRemoveGroup = 0;
 
       if (validateUser(row.id_user) === 0) {
         addUsers(row);
-      } else if (validateUser(row.id_user) === 2) {
+
+        if ( counter > 1 && row.id_group !== groupData.id_group ) {
+          ableToRemoveUser = 1;
+        }
+
+      } else if (validateUser(row.id_user) === 2 ) {
         addGroups();
         users = [];
       }
 
       if (validateGroup(row.id_group) === 0) {
         if (groupsControl.length !== 0) {
-          // Acaba adicionado o mesmo grupo 2x se o user = null
-          addGroups();
+          if (users.length !== 0 && ableToRemoveUser === 1) {
+            handleRemoveUser(row.id_user);
+          }
+
+          if (counter > 1 && row.id_group !== groupData.id_group) {
+            ableToRemoveGroup = 1;
+          }
+
+          if (row.id_user !== null) {
+              addGroups();
+          }
 
           users.length = 0;
           usersControl.length = 0;
 
-          addUsers(row);
+           if (row.id_user !== null && row.name !== null){
+            addUsers(row);
+          }
         }
 
         groupsControl.push(row.id_group);
@@ -162,16 +211,20 @@ export default {
           groupName: row.groupName
         }
       } else if (validateGroup(row.id_group) === 2) {
+        addWorkschedules();
         groups = [];
       }
 
       if (validateWorkschedule(row.id_workschedule) === 0) {
         if (workscheduleControl.length !== 0) {
-          response.workschedules.push({
-            id_workschedule: workscheduleData.id_workschedule,
-            date: workscheduleData.date,
-            groups: groups
-          });
+          
+          if(groups.length !== 0 && ableToRemoveGroup === 1) {
+            handleRemoveGroup(row.id_group);
+          }
+
+          if (row.id_group !== null) {
+            addWorkschedules();
+          }
 
           // Reseting control variables
           groupsControl.length = 0;
@@ -180,6 +233,11 @@ export default {
           // Reseting auxiliary variables
           users.length = 0;
           groups.length = 0;
+
+          /*
+          if (row.id_group !== null) {
+            addGroups();
+          } */
         }
 
         workscheduleControl.push(row.id_workschedule);
@@ -192,15 +250,7 @@ export default {
       }
 
       if (counter === data.length) {
-        if (row.id_group !== null) {
-          addGroups();
-        }
-
-        response.workschedules.push({ 
-          id_workschedule: workscheduleData.id_workschedule,
-          date: workscheduleData.date,
-          groups: groups
-        });
+        addWorkschedules();
       }
     }); 
 

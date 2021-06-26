@@ -70,7 +70,7 @@ export default {
           ON groups_users.id_group = infGroups.id_group
         LEFT JOIN inf_entity_users AS users
           ON users.id_user = groups_users.id_user
-       ORDER BY workschedule.id_workschedule, infGroups.id_group ASC;
+       ORDER BY workschedule.id_workschedule, infGroups.id_group, users.id_user DESC;
       `);
 
       if (workschedules.length === 0) {
