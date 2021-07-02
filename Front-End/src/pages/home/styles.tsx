@@ -18,7 +18,41 @@ const styles = StyleSheet.create({
   homeOptionButtonsContainer: {
       alignSelf: 'stretch'
   },
+  containerPerfil :{
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 50,
+    elevation: 2,
+    borderRadius: 5,
+    borderBottomColor: '#ccc',
+    borderBottomEndRadius: 10,
+    borderBottomLeftRadius: 10,
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden',
+  },
+  menu:{
+    padding: 0,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
 
+  },
+  
+  buttons : {
+    height: 180,
+    paddingLeft: 20,
+    borderWidth: 2,
+    borderColor: '#ccc',
+    borderRadius: 10,
+    padding: 15,
+    marginTop: 5,
+
+  },
   buttonsPageHomeContainer: {
     backgroundColor: "#56449A",
     borderRadius: 6,
@@ -26,7 +60,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 90,
     marginTop: 10,
-    marginRight: 10
+    marginRight: 10,
+  },
+  containerImagem :{
+    flexDirection: 'row',
+    width: "100%",
+    backgroundColor: "#56449A",
+    
+  },
+  imagem: {
+    height: 150,
+    width: "100%",
   },
   textButtonsPageHome: {
     color: "white",
@@ -40,7 +84,6 @@ const styles = StyleSheet.create({
   titlePageHomeText: {
     fontSize: 20,
   },
-
   titleSectionPageHome: {
       fontSize: 20,
       marginTop: 20

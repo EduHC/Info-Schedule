@@ -1,3 +1,4 @@
+import { composeP } from "ramda";
 import React, { useState } from "react";
 import { View, Text, Pressable, Alert, Modal, Image, StatusBar } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -5,12 +6,9 @@ import { TextInput } from "react-native-paper";
 import api from "../../services/api";
 import styles from "./styles";
 
-interface Help {
-  props: any;
-  navigation: any;
-}
 
-export default function Usuario(props: Help) {
+export default function Usuario({ route, navigation }: any) {
+  const { idEmpresa, outros } = route.params;
   const [nome, onChangeNome] = React.useState("");
   const [login, onChangeLogin] = React.useState("");
   const [password, onChangePassword] = React.useState("");
@@ -21,7 +19,7 @@ export default function Usuario(props: Help) {
     name: nome,
     login: login,
     password: password,
-    id_owner: 1,
+    id_owner: idEmpresa,
   };
 
   function createUsuario() {
@@ -29,7 +27,7 @@ export default function Usuario(props: Help) {
       name: nome,
       login: login,
       password: password,
-      id_owner: 1,
+      id_owner: idEmpresa,
     };
 
     api
@@ -40,8 +38,9 @@ export default function Usuario(props: Help) {
         id_owner: Funcionario.id_owner,
       })
       .then(function (response) {
-        console.log(response.data.user.name);
+        console.log(response);
         FuncionarioModal.name = response.data.user.name;
+        addProfile(response.data.user.id_user);
       })
       .catch(function (error) {
         console.log(error);
@@ -50,16 +49,25 @@ export default function Usuario(props: Help) {
     setModalVisible(true);
   }
 
+  function addProfile(id_user: any) {
+    const resp = api.post('/usersprofiles', {
+      id_user: id_user,
+      profiles: [2],
+    }).then(function (resp) {
+
+    });
+  }
+
   return (
     <View style={styles.container}>
-        <StatusBar></StatusBar>
-        <View style={styles.containerInfo}>
-          <Text style={styles.info}>
-            Preencha os dados do novo Colaborador no formulario abaixo.
-          </Text>
-        </View>
+      <StatusBar></StatusBar>
+      <View style={styles.containerInfo}>
+        <Text style={styles.info}>
+          Preencha os dados do novo Colaborador no formulario abaixo.
+        </Text>
+      </View>
       <View style={styles.container}>
-        
+
         <View style={styles.form}>
           <Text style={styles.h1}>Novo Colaborador</Text>
           <View style={styles.containerImage}>
@@ -76,7 +84,7 @@ export default function Usuario(props: Help) {
             returnKeyType="next"
             placeholderTextColor="#56449A"
             onChangeText={text => onChangeNome(text)}
-            value= {nome}
+            value={nome}
           />
 
           <TextInput
@@ -87,7 +95,7 @@ export default function Usuario(props: Help) {
             returnKeyType="next"
             placeholderTextColor="#56449A"
             onChangeText={text => onChangeLogin(text)}
-            value= {login}
+            value={login}
           />
 
           <TextInput
@@ -98,7 +106,7 @@ export default function Usuario(props: Help) {
             returnKeyType="next"
             placeholderTextColor="#56449A"
             onChangeText={text => onChangePassword(text)}
-            value= {password}
+            value={password}
           />
 
           <TouchableOpacity
@@ -117,7 +125,6 @@ export default function Usuario(props: Help) {
             transparent={true}
             visible={modalVisible}
             onRequestClose={() => {
-              Alert.alert("Modal has been closed.");
               setModalVisible(!modalVisible);
             }}
           >
@@ -136,6 +143,7 @@ export default function Usuario(props: Help) {
                     onChangeNome('');
                     onChangePassword('');
                     onChangeLogin('');
+                    navigation.navigate('Home');
                   }}
                 >
                   <Text style={styles.textStyle}>Fechar</Text>
@@ -145,8 +153,6 @@ export default function Usuario(props: Help) {
           </Modal>
         </View>
       </View>
-
-
     </View>
   );
 }

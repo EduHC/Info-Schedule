@@ -10,7 +10,14 @@ import Login from '../pages/login';
 import Home from '../pages/home';
 import Usuario from '../pages/usuario';
 import ListaUsuario from '../pages/listaUsuarios';
-
+import Grupos from '../pages/gerenciagrupos';
+import CriaGrupos from '../pages/gerenciagrupos/criarGrupo';
+import AdicionaPessoas from '../pages/gerenciagrupos/adicionarPessoas';
+import Escalas from '../pages/gerenciaEscalas';
+import criarEscalas from '../pages/gerenciaEscalas/criarEscala';
+import LinkaGrupoEscalas from '../pages/gerenciaEscalas/linkaGrupoEscala';
+import VisualizarGrupos from '../pages/gerenciagrupos/visualizarGrupos';
+import VisualizarEscala from '../pages/gerenciaEscalas/visualizarEscala';
 
 const Stack = createStackNavigator();
 
@@ -33,10 +40,16 @@ export default function Routes() {
           options={{
             headerShown: true
           }}
-
         />
-        <Stack.Screen name="Lista Colaboradores" component={ListaUsuario}
-        />
+        <Stack.Screen name="Lista Colaboradores" component={ListaUsuario}/>
+        <Stack.Screen name="Gerencia Grupos" component={Grupos}/>
+        <Stack.Screen name="Criar novo grupo" component={CriaGrupos}/>
+        <Stack.Screen name="Adicionar pessoas ao grupo" component={AdicionaPessoas}/>
+        <Stack.Screen name="Gerenciar Escalas" component={Escalas}/>
+        <Stack.Screen name="Visualizar Escalas" component={VisualizarEscala}/>
+        <Stack.Screen name="Criar Escala" component={criarEscalas}/>
+        <Stack.Screen name="Adicionar Grupo a Escala" component={LinkaGrupoEscalas}/>
+        <Stack.Screen name="Visualizar Grupo" component={VisualizarGrupos}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
