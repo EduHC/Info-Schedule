@@ -40,7 +40,7 @@ export default function criarEscalas({ route, navigation }: any) {
         });
         
         if (resp.status === 201 || resp.status === 200) {
-          setId_workshedule(resp.data.workschedule.id_workschedule);
+          setId_workshedule(resp.data.id_workschedule);
           setModalVisible(true);
         }
 

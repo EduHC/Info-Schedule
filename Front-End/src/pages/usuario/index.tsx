@@ -22,7 +22,7 @@ export default function Usuario({ route, navigation }: any) {
     id_owner: idEmpresa,
   };
 
-  function createUsuario() {
+  async function createUsuario() {
     const Funcionario = {
       name: nome,
       login: login,
@@ -30,7 +30,7 @@ export default function Usuario({ route, navigation }: any) {
       id_owner: idEmpresa,
     };
 
-    api
+    await api
       .post("/users", {
         name: Funcionario.name,
         login: Funcionario.login,
@@ -38,9 +38,9 @@ export default function Usuario({ route, navigation }: any) {
         id_owner: Funcionario.id_owner,
       })
       .then(function (response) {
-        console.log(response);
-        FuncionarioModal.name = response.data.user.name;
-        addProfile(response.data.user.id_user);
+        console.log(response.data.id_user);
+        FuncionarioModal.name = response.data.name;
+        addProfile(response.data.id_user);
       })
       .catch(function (error) {
         console.log(error);

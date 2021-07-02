@@ -42,7 +42,7 @@ export default function Home({ route, navigation }: any) {
     async function getProfile(id: any) {
         const resp = await api.get(`/usersprofiles/${id}`);
         var profile = resp.data[0].id_profile.name;
-        if (profile === "Gestor") {
+        if (profile === "Gerente") {
             onChangeGenGestor(true);
             onChangeLoad(false)
         } else {

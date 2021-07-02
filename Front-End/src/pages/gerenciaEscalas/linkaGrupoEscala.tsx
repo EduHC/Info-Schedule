@@ -38,7 +38,7 @@ export default function VisualizarGrupos({ route, navigation }: any) {
             });
     }, []);
 
-    console.log(funcionarios);
+    //console.log(funcionarios);
     const Item = ({ item }: any) => (
         <TouchableOpacity style={[styles.item, { backgroundColor: groupsSelecteds.includes(item.id_group) === true ? 'green' : 'white', flexDirection: 'row', height: 75, alignItems: 'center', justifyContent: 'space-between', marginTop: 45 }]} onPress={() => {
             if (!groupsSelecteds.includes(item.id_group)) {
@@ -79,8 +79,8 @@ export default function VisualizarGrupos({ route, navigation }: any) {
             <Text >Nome Colaborador: {item.name}</Text>
         </TouchableOpacity>
     )
-    console.log(idEscala);
-    console.log(groupsSelecteds);
+    //console.log(idEscala);
+    //console.log(groupsSelecteds);
 
 
     async function adicionarGrupoAEscala() {

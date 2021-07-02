@@ -42,7 +42,7 @@ export default function ListaUsuario(props: any) {
   }, []);
 
   React.useEffect(() => {
-    api.get('/owners/1').then(function (response) {
+    api.get('/owners/2').then(function (response) {
       // handle success
       // console.log(response.data);
       setEmpresa(response.data);

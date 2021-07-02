@@ -95,7 +95,7 @@ export default function VisualizarGrupos({ route, navigation }: any) {
             <FlatList
                 data={group}
                 renderItem={({ item }) => <Item item={item} />}
-                keyExtractor={item => item.id_group}
+                keyExtractor={item => (item.id_group.toString())}
             />
 
             <View style={styles.centeredView}>

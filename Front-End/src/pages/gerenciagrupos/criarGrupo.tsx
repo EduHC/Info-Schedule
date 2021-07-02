@@ -46,15 +46,13 @@ export default function CriaGrupos({ route, navigation }: any) {
     function criaGrupo() {
 
         const Grupo = {
-            id_owner: 1,
+            id_owner: 2,
             name: nome,
             start_hour: horaInicio,
             end_hour: horaFim,
         }
 
         return Grupo;
-        console.log(Grupo);
-
     }
 
     function limpaCampo() {
@@ -66,10 +64,10 @@ export default function CriaGrupos({ route, navigation }: any) {
         onChangeNome('');
     }
 
-    function enviar() {
+    async function enviar() {
         console.log('enviando');
         let grupo = criaGrupo()
-        api
+        await api
             .post("/groups", {
                 id_owner: grupo.id_owner,
                 name: grupo.name,
