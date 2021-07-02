@@ -233,11 +233,6 @@ export default {
           // Reseting auxiliary variables
           users.length = 0;
           groups.length = 0;
-
-          /*
-          if (row.id_group !== null) {
-            addGroups();
-          } */
         }
 
         workscheduleControl.push(row.id_workschedule);
