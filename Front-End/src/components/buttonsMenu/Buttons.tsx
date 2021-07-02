@@ -7,14 +7,13 @@ import {
 }from "react-native";
 import { IconButton } from "react-native-paper";
 
-export default function ButtonMenu(props) {
+export default function ButtonMenu(props:any) {
     return(
         <TouchableOpacity onPress={props.onPress} style={styles.buttonsPageHomeContainer}>
             <IconButton style={styles.buttonIconPageHome}
                 icon={props.nameIcon}
                 color='white'
                 size={40}
-
             />
             <Text style={styles.textButtonsPageHome}>{props.name}</Text>
         </TouchableOpacity>
@@ -26,7 +25,6 @@ export default function ButtonMenu(props) {
 const styles = StyleSheet.create({
     homeContainer: {
       backgroundColor: "#f5f5f5",
-      padding: 10,
       flex: 1,
     },
   
@@ -37,16 +35,19 @@ const styles = StyleSheet.create({
     buttonsPageHomeContainer: {
       backgroundColor: "#56449A",
       borderRadius: 6,
+      borderColor: '#ccc',
       alignItems: "center",
       justifyContent: "center",
-      height: 130,
-      width:180,
-      marginTop: 10,
-      marginRight: 10
+      width:163,
+      height:150,
+      marginRight: 15,
+      marginBottom: 15,
+      elevation: 1,
     },
     textButtonsPageHome: {
       color: "white",
       fontSize: 20,
+      padding: 7,
       textAlign: "center",
     },
     titlePageHomeContainer: {

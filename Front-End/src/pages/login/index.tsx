@@ -21,7 +21,7 @@ interface Help {
     navigation: any
   }
 //[Renald 01/04] abaixo apos o return começamos a nossa tela de login
-export default function Login({navigation}) {
+export default function Login({navigation}:any) {
     /**
      * [Renald 01/04] useEffect responvel por esconder as informação da app como hora/dia/data/bateria
      * entenda mais sobre StatusBar.setHidden em
@@ -64,7 +64,6 @@ export default function Login({navigation}) {
             onChangeNome('');
             onChangeSenhaLogin('');
         }
-
     };
    
     /**
