@@ -116,7 +116,7 @@ export default function Home({ route, navigation }: any) {
                         horizontal={true}
                         showsHorizontalScrollIndicator={false}
                     >
-                        <ButtonMenu name="Visualizar Escalas" nameIcon="text-box-search" onPress={() => { navigation.push('Lista Colaboradores') }} />
+                        <ButtonMenu name="Visualizar Escalas" nameIcon="text-box-search" onPress={() => { navigation.push("Visualizar Escalas") }} />
                         <ButtonMenu name="Cartão Ponto" nameIcon="alarm" onPress={() => { navigation.push('Lista Colaboradores') }} />
                         <ButtonMenu name="Notificações" nameIcon="bell-ring" onPress={() => { navigation.push('Lista Colaboradores') }} />
 

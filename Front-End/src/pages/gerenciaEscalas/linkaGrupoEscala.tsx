@@ -15,7 +15,7 @@ import moment from "moment";
     * @external https://reactnative.dev/docs/style
 */
 export default function VisualizarGrupos({ route, navigation }: any) {
-    const { idEscala, otherParam } = route.params;
+    const { idEscala } = route.params;
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisibleGroup, setModalVisibleGroup] = useState(false);
     const [group, setGroup] = React.useState([]);
@@ -82,12 +82,17 @@ export default function VisualizarGrupos({ route, navigation }: any) {
     //console.log(idEscala);
     //console.log(groupsSelecteds);
 
-
+    console.log('Escala: ' + idEscala);
+    console.log('Grupos: ' + groupsSelecteds);
     async function adicionarGrupoAEscala() {
         const resp = await api.post('/workschedulesgroups', {
             id_workschedule: idEscala,
             groups: groupsSelecteds,
         });
+
+        console.log('RESPOSNE DO RELACIONAMENTO' + resp);
+
+
         if (resp.status === 200 || resp.status === 201) {
             setModalVisible(true);
         }
@@ -98,14 +103,14 @@ export default function VisualizarGrupos({ route, navigation }: any) {
             <FlatList
                 data={group}
                 renderItem={({ item }) => <Item item={item} />}
-                keyExtractor={item => item.id_group}
+                keyExtractor={item => item.id_group.toString()}
             />
 
             <View>
                 <TouchableOpacity style={styles.item}
                     onPress={() => {
                         adicionarGrupoAEscala();
-                        navigation.push('Visualizar Escalas');
+                        navigation.push('Gerenciar Escalas');
                     }}
 
                 >
@@ -125,7 +130,7 @@ export default function VisualizarGrupos({ route, navigation }: any) {
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
                             <Text style={styles.modalText}>
-                                Grupo Criado Com sucesso
+                                Grupos relacionados com sucesso
                             </Text>
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
@@ -161,16 +166,6 @@ export default function VisualizarGrupos({ route, navigation }: any) {
                                 renderItem={({ item }) => <ItemF item={item} />}
                                 keyExtractor={item => item.id_user.toString()}
                             />
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => {
-                                    navigation.push('Gerenciar Escalas');
-                                    setModalVisibleGroup(!modalVisibleGroup);
-
-                                }}
-                            >
-                                <Text style={styles.textStyle}>Editar Grupo</Text>
-                            </Pressable>
 
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}

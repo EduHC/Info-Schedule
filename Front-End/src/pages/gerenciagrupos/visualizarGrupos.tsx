@@ -15,10 +15,10 @@ import moment from "moment";
     * @external https://reactnative.dev/docs/style
 */
 export default function VisualizarGrupos({ route, navigation }: any) {
-    const [modalVisible,] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
     const [modalVisibleGroup, setModalVisibleGroup] = useState(false);
     const [group, setGroup] = React.useState([]);
-    const [groupsSelecteds, setGroupsSelected] = React.useState([]);
+    //const [groupsSelecteds, setGroupsSelected] = React.useState([]);
     const [funcionarios, setFuncionario] = React.useState([]);
     let usersSelects = [];
 
@@ -39,26 +39,14 @@ export default function VisualizarGrupos({ route, navigation }: any) {
 
     console.log(funcionarios);
     const Item = ({ item }: any) => (
-        <TouchableOpacity style={[styles.item, { backgroundColor: groupsSelecteds.includes(item.id_group) === true ? 'green' : 'white', flexDirection: 'row', height: 75, alignItems: 'center', justifyContent: 'space-between', marginTop: 45 }]} onPress={() => {
-            if (!groupsSelecteds.includes(item.id_group)) {
-                //@ts-ignore 
-                setGroupsSelected(groupsSelecteds => [...groupsSelecteds, item.id_group]);
-            } else {
-                usersSelects = [...groupsSelecteds];
-                //@ts-ignore
-                usersSelects.splice(usersSelects.indexOf(item.id_group), 1);
-                setGroupsSelected(usersSelects);
-            }
+        <TouchableOpacity style={[styles.item, { backgroundColor: 'white', flexDirection: 'row', height: 75, alignItems: 'center', justifyContent: 'space-between', marginTop: 45 }]} 
+        onPress={() => {
+            setFuncionario(item.users);
+            setModalVisibleGroup(true);
         }} >
-            <Text style={[styles.descricao, { color: groupsSelecteds.includes(item.id_group) === true ? 'white' : 'black' }]}>Nome do grupo: {item.groupName}</Text>
+            <Text style={[styles.descricao, { color: 'black' }]}>Nome do grupo: {item.groupName}</Text>
             {/* <Text >Nome Colaborador: {item.id_group}</Text> */}
             <TouchableOpacity
-                onPress={() => {
-                    setFuncionario(item.users);
-
-                    setModalVisibleGroup(true);
-
-                }}
                 style={styles.containerImagem}>
                 <Image
                     style={styles.imagem}
@@ -71,24 +59,11 @@ export default function VisualizarGrupos({ route, navigation }: any) {
     const ItemF = ({ item }: any) => (
         <TouchableOpacity style={styles.item}
             onPress={() => {
-
             }}
-
         >
             <Text >Nome Colaborador: {item.name}</Text>
         </TouchableOpacity>
     )
-
-
-    async function adicionarGrupoAEscala() {
-        const resp = await api.post('/workschedulesgroups', {
-            id_workschedule: 1,
-            groups: groupsSelecteds,
-        });
-        if (resp.status === 200 || resp.status === 201) {
-            setModalVisible(true);
-        }
-    }
 
     return (
         <SafeAreaView style={styles.containerButtonGerenciador}>
@@ -115,7 +90,7 @@ export default function VisualizarGrupos({ route, navigation }: any) {
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() => {
-                                    navigation.push('Gerenciar Escalas');
+                                    navigation.push('Gerencia Grupos');
                                     setModalVisible(!modalVisible);
 
                                 }}
@@ -149,20 +124,7 @@ export default function VisualizarGrupos({ route, navigation }: any) {
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() => {
-                                    navigation.push('Gerenciar Escalas');
                                     setModalVisibleGroup(!modalVisibleGroup);
-
-                                }}
-                            >
-                                <Text style={styles.textStyle}>Editar Grupo</Text>
-                            </Pressable>
-
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => {
-                                    navigation.push('Gerenciar Escalas');
-                                    setModalVisibleGroup(!modalVisibleGroup);
-
                                 }}
                             >
                                 <Text style={styles.textStyle}>Fechar</Text>

@@ -35,13 +35,13 @@ export default function criarEscalas({ route, navigation }: any) {
     }
     async function criarEscala() {
         const resp = await api.post('/workschedules', {
-          id_owner: 1,
+          id_owner: 2,
           date: dataEscolhida,
         });
         
         if (resp.status === 201 || resp.status === 200) {
-          setId_workshedule(resp.data.id_workschedule);
-          setModalVisible(true);
+            setId_workshedule(resp.data.workschedule.id_workschedule);
+            setModalVisible(true);
         }
 
       }
@@ -72,18 +72,16 @@ export default function criarEscalas({ route, navigation }: any) {
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
                             <Text style={styles.modalText}>
-                                Grupo Criado Com sucesso
+                                Escala criada com sucesso
                             </Text>
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() => {
                                     console.log(id_workshedule + '  id da escala gerada');
                                     navigation.push('Adicionar Grupo a Escala', {
-                                        idEscala: id_workshedule,
-                                        otherParam: 'anything you want here',
+                                        idEscala: id_workshedule
                                     })
                                     setModalVisible(!modalVisible);
-
                                 }}
                             >
                                 <Text style={styles.textStyle}>Adicionar um grupo nessa escala</Text>

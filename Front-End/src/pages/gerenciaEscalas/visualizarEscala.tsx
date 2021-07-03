@@ -116,15 +116,6 @@ export default function VisualizarEscala({ route, navigation }: any) {
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() => {
-
-                                }}
-                            >
-                                <Text style={styles.textStyle}>Editar Grupo</Text>
-                            </Pressable>
-
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => {
                                     setModalVisibleGroupDayEscala(false);
                                 }}
                             >
@@ -154,14 +145,6 @@ export default function VisualizarEscala({ route, navigation }: any) {
                                 renderItem={({ item }) => <ItemF item={item} />}
                                 keyExtractor={item => item.id_group.toString()}
                             />
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => {
-
-                                }}
-                            >
-                                <Text style={styles.textStyle}>Editar Grupo</Text>
-                            </Pressable>
 
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}

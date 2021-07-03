@@ -40,11 +40,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-
   },
   
   buttons : {
-    height: 180,
+    height: 200,
     paddingLeft: 20,
     borderWidth: 2,
     borderColor: '#ccc',
@@ -66,7 +65,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: "100%",
     backgroundColor: "#56449A",
-    
   },
   imagem: {
     height: 150,
